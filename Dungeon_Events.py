@@ -1,0 +1,139 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Apr  6 20:38:30 2019
+
+@author: Raymond
+"""
+from Dungeon_Items import Items
+from Dungeon_Minions import Minions
+import random
+
+
+class Event:
+    def __init__(self, event_id, player):
+        self.event_id = event_id
+        #self.success = False
+        self.player = player
+        
+    def fetchEvent(self):
+        while(True):
+            print("event:", self.event_id)
+            
+            if self.event_id is 'event_enemy_encounter':
+                random_minion = random.uniform(0,1)
+                
+                if random_minion < 0.5:
+                    new_minion = Minions('rat', self.player)
+                    return new_minion.spawnMinion()
+                    
+                else:
+                    new_minion = Minions('thief', self.player)
+                    new_minion.spawnMinion()
+                    
+                break
+                
+            elif self.event_id is 'event_enemy_encounter_boss':
+                random_boss = random.uniform(0,1)
+                
+                if random_boss < 0.5:
+                    new_minion = Minions('big_rat')
+                    return new_minion.spawnBoss(self.player)
+                    
+                else:
+                    new_minion = Minions('theif_boss')
+                    return new_minion.spawnBoss(self.player)
+                    
+                break
+                
+            elif self.event_id is 'event_shop':
+                item_Class = Items()
+                print("There is a shop here.")
+                print()
+                
+                scripted_phrases = ['LOOK! NO TOUCH! Unless you have coin....']
+                phrase = random.choice(scripted_phrases)
+                print (phrase)
+                
+                #Test shop
+                self.player.gold = 10000
+                
+                equipment_arr = random.sample(item_Class.veryeasy_shop_equipment, 5)
+                item_arr = random.sample(item_Class.veryeasy_shop_item, 5)
+                while(True):                
+                    print()
+                    print('Equipment:')
+                    for e in equipment_arr:
+                        print(e)
+                    print()
+                    print('Items:')
+                    for i in item_arr:
+                        print(i)
+                    print()
+                    
+                    item_not_found = True
+                    not_enough_gold = False
+                    
+                    print('Gold:',self.player.gold)
+                    print()
+                    command = input('What would the adventurer like to purchase?>')
+                    if command in ['q','Q','exit','Exit','Quit','quit']:
+                        print ("Goodbye")
+                        print()
+                        break
+                    else:
+                        for e in equipment_arr:
+                            if command == e[0]:
+                                if e[1] > self.player.gold:
+                                    print('NO GOLD! NO TOUCH!')
+                                    not_enough_gold = True
+                                    break
+                                else:
+                                    item_not_found = False
+                                    self.player.gold -= e[1]
+                                    equipment_arr.remove(e)
+                                    self.player.equipment.append(e)
+                                    print('A fine purchase.')
+                                    break
+                            
+                        for i in item_arr:
+                            if command == i[0]:
+                                if i[1] > self.player.gold:
+                                    print('NO GOLD! NO TOUCH!')
+                                    not_enough_gold = True
+                                    break
+                                else:
+                                    item_not_found = False
+                                    self.player.gold -= i[1]
+                                    item_arr.remove(i)
+                                    self.player.inventory.append(i)
+                                    print('A fine purchase.')
+                                    break
+                        if item_not_found == True and not_enough_gold == False:
+                            print('WHAT!')
+                            continue
+                break                                
+                
+            elif self.event_id is 'event_bonfire':
+                print("There is a bonfire here.")
+                break
+                
+            elif self.event_id is 'event_random_positive':
+                print("There is a random event here.")
+                break
+                
+            elif self.event_id is 'event_empty':
+                print("There is nothing here.")
+                break
+            
+            elif self.event_id is 'dead_enemies':
+                print('The adventurers past battle lies before them')
+                break
+            
+            elif self.event_id is 'empty_shop':
+                print('An empty stall lies before the adventurer. It seems the shop has left')
+                break
+                
+            else:
+                print('unknown event')
+                break
+            
