@@ -16,6 +16,12 @@ You awake to unknown dungeon guided by an unknown voice. Face monsters and hazar
 - Randomized Dungeon
 - Multiple Enemy types
 
+## How to Play
+1.) Download files
+2.) run python on Dungeon_Game_Main
+3.) Follow hints to get started
+4.) Enjoy!
+
 ## Future Work
 - Multiple floors w/ exit           (Added May 2019)
 - Implement more room types (traps, random encounters, etc.)           (Added May 2019)
