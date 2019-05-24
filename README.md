@@ -24,14 +24,24 @@ You awake to unknown dungeon guided by an unknown voice. Face monsters and hazar
 
 ## File Description
 - Basic_Room.py
-    * Room Object
-- Dungeon_Crawler_Main.py: Main script. Handles Main "UI" Loop.
-- Dungeon_Events.py: Checks each room for its random event and handles it.
-- Dungeon_Generator.py: Dungeon Creation script. Randomizes layout and events.
-- Dungeon_Items.py: Holds all Items and Equipments to be called.
-- Dungeon_Minions.py: Handles all minions and bosses as well as combat.
-- Dungeon_Player.py: Player Object
-- Dungeon_Skills.py: Holds all skills and class options.
+   * Room Object
+- Dungeon_Crawler_Main.py 
+   * Main script 
+   * Handles Main "UI" Loop
+- Dungeon_Events.py 
+   * Checks each room for its random event and handles it
+- Dungeon_Generator.py
+   * Dungeon Creation script 
+   * Randomizes layout and events
+- Dungeon_Items.py 
+   * Holds all Items and Equipments to be called
+- Dungeon_Minions.py 
+   * Handles all minions and bosses
+   * Combat loop
+- Dungeon_Player.py 
+   * Player Object
+- Dungeon_Skills.py 
+   * Holds all skills and class options.
 
 ## Future Work
 - Multiple floors w/ exit           (Added May 2019)
