@@ -17,10 +17,10 @@ You awake to unknown dungeon guided by an unknown voice. Face monsters and hazar
 - Multiple Enemy types
 
 ## How to Play
-1.) Download files
-2.) run python on Dungeon_Crawler_Main.py
-3.) Follow hints to get started
-4.) Enjoy!
+1.) Download files  
+2.) run python on Dungeon_Crawler_Main.py  
+3.) Follow hints to get started  
+4.) Enjoy!  
 
 ## File Description
 - Basic_Room.py: Room Object
