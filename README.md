@@ -23,7 +23,8 @@ You awake to unknown dungeon guided by an unknown voice. Face monsters and hazar
 4.) Enjoy!  
 
 ## File Description
-- Basic_Room.py: Room Object
+- Basic_Room.py
+    * Room Object
 - Dungeon_Crawler_Main.py: Main script. Handles Main "UI" Loop.
 - Dungeon_Events.py: Checks each room for its random event and handles it.
 - Dungeon_Generator.py: Dungeon Creation script. Randomizes layout and events.
