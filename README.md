@@ -18,7 +18,7 @@ You awake to unknown dungeon guided by an unknown voice. Face monsters and hazar
 
 ## How to Play
 1.) Download files
-2.) run python on Dungeon_Game_Main
+2.) run python on Dungeon_Crawler_Main.py
 3.) Follow hints to get started
 4.) Enjoy!
 
