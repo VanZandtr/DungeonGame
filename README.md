@@ -50,4 +50,5 @@ You awake to unknown dungeon guided by an unknown voice. Face monsters and hazar
 - Furthur class skill design        (Added May 2019)  
 - Lore and Item/Equipment creation  (Added May 2019)  
 - Turn Dungeon_Minions.py into two scripts (Combat and Minions). (Added May 2019)  
-- Change Dungeon_Minions.py, Dungeon_Skills.py, and Dungeon_Items.py into Tables.(Added May 2019)  
+- Change Dungeon_Minions.py, Dungeon_Skills.py, and Dungeon_Items.py into Tables.(Added May 2019) 
+- Make items/equipment usable in combat           (Added May 2019)
