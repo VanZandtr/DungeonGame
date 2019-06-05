@@ -34,3 +34,27 @@ class Items:
         self.veryeasy_shop_equipment = [self.rusty_sword,self.rusty_sword, self.rusty_sword, self.iron_sword, self.kal_thon_sword]
         
         self.veryeasy_shop_item = [self.minor_health_potion, self.minor_health_potion, self.minor_mana_potion, self.minor_mana_potion, self.nic_tha_tal_potion]
+        
+    def useItem(self, item, player):
+        
+        #name, cost, max health increase, max mana increase, temp health increase, temp mana increase, description
+        
+        #max health
+        if item[2] > 0:
+            player.max_health += item[2];
+            
+        #max mana
+        if item[3] > 0:
+            player.max_mana += item[3];
+        
+        #temp health
+        if item[4] > 0:            
+            if (player.health + item[4]) > player.max_health:
+                player.health = player.max_health;
+        
+        #temp mana
+        if item[5] > 0:            
+            if (player.current_mana + item[5]) > player.max_mana:
+                player.current_mana = player.max_mana;
+             
+    

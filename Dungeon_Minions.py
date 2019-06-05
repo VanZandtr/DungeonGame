@@ -359,9 +359,28 @@ class Minions:
                 elif command in ['i','I','item', 'Item', 'use Item', 'use item', 'Use Item', 'Use item']:
                     print('The adventurer uses an item')
                     print()
-                    print('item removed')
-                    print()
-                    turn_not_over = False
+                    
+                    for item in range(len(self.player.inventory)):
+                            print(item[0],' ', item[6]);
+                        
+                    item_command = input('>')
+                    item_found = False
+                    for item in range(len(self.player.inventory)):
+                        if item_command == item[0]:
+                            item_found = True
+                            use_item = item[0];
+                            
+                            new_item = Items();
+                            #use the item
+                            new_item.useItem(use_item, self.player);
+                            print('item removed')
+                            print()
+                            
+                    if item_found == True:
+                        turn_not_over = False
+                    else:
+                        turn_not_over = True
+                    
                 elif command in ['r','R','run', 'Run']:
                     run = random.uniform(0,1)
                     if run <= self.player.run_percent:

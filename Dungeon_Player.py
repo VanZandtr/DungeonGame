@@ -10,6 +10,7 @@ class Player:
         self.level = 0
         self.level_array = [0,1000,2000,3000,4000]
         self.health = 100
+        self.max_health = 100
         self.exp = 0
         self.gold = 10
         self.max_mana = 100

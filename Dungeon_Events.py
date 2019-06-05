@@ -61,11 +61,11 @@ class Event:
                 item_arr = random.sample(item_Class.veryeasy_shop_item, 5)
                 while(True):                
                     print()
-                    print('Equipment:')
+                    print('Equipment [name, cost, damage added, addition max health, additional max mana, mana restore, health restore, additional properties, description]:')
                     for e in equipment_arr:
                         print(e)
                     print()
-                    print('Items:')
+                    print('Items [name, cost, max health increase, max mana increase, temp health increase, temp mana increase, description]:')
                     for i in item_arr:
                         print(i)
                     print()
@@ -75,6 +75,7 @@ class Event:
                     
                     print('Gold:',self.player.gold)
                     print()
+                    print('(q, Q, exit, Exit, Quit, quit) to leave.')
                     command = input('What would the adventurer like to purchase?>')
                     if command in ['q','Q','exit','Exit','Quit','quit']:
                         print ("Goodbye")
