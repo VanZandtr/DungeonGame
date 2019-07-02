@@ -51,7 +51,7 @@ You awake to unknown dungeon guided by an unknown voice. Face monsters and hazar
 - Lore and Item/Equipment creation  (Added May 2019)  
 - Turn Dungeon_Minions.py into two scripts (Combat and Minions). (Added May 2019)  
 - Change Dungeon_Minions.py, Dungeon_Skills.py, and Dungeon_Items.py into Tables (ie Database).(Added May 2019) 
-- <s>Make items/equipment usable in combat           (Added June 2019)<s> (Completed 7/2/2019)
+- <s>Make items/equipment usable in combat           (Added June 2019)</s> (Completed 7/2/2019)
 
 ## Update (7/2/2019)
 - Added Armor and Weapon Durablitity
