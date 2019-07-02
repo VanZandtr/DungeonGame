@@ -95,7 +95,7 @@ class Event:
                                     item_not_found = False
                                     self.player.gold -= e[2]
                                     equipment_arr.remove(e)
-                                    self.player.equipment.append(e)
+                                    self.player.equipment.append(e.copy())
                                     print('A fine purchase.')
                                     break
                             
@@ -109,7 +109,7 @@ class Event:
                                     item_not_found = False
                                     self.player.gold -= i[2]
                                     item_arr.remove(i)
-                                    self.player.inventory.append(i)
+                                    self.player.inventory.append(i.copy())
                                     print('A fine purchase.')
                                     break
                         if item_not_found == True and not_enough_gold == False:

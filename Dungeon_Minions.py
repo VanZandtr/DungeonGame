@@ -452,7 +452,31 @@ class Minions:
                     else:
                         damage = random.choice(minion_damage)
                         print(minion[0],'hit for', damage)
-                        self.player.health -= damage
+                        
+                        armor_modifier = 0
+                        armor_rating = 0
+                        for armor in self.player.currently_equipped:
+                            if armor[1] is not 'hand':
+                                armor_modifier += 1
+                                armor_rating += float(armor[6])
+                                
+                                #calulcate damage to armors
+                                damage_to_armor_chance = math.ceil(random.uniform(1,4))
+                                #if damage_to_weapon_chance == 4:
+                                if damage_to_armor_chance > 0:
+                                    damage_to_armor = math.ceil(random.uniform(1, armor[6]/4))
+                                    print('The adventurer\'s ',armor[0],' sustained ',damage_to_armor,' damage')
+                                    armor[7] = float(armor[7]) - damage_to_armor
+                                    if armor[7] <= 0:
+                                        print('The adventurer\'s',armor[0], 'was destroyed')
+                                        self.player.currently_equipped.remove(e)
+                                print(armor)
+                    
+                        armor_absorption = armor_modifier * armor_rating * self.player.level
+                        
+                        self.player.health -= (damage - armor_absorption)
+                        
+                        
             print()
             
             if self.player.health <= 0:

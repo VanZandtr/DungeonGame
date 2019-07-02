@@ -7,7 +7,7 @@ Created on Sun Apr 14 21:34:12 2019
 class Items:
     def __init__(self):
         #temp health/mana is a buffer until used up -> ie damage is taken from temp each round first
-        #name, type, cost, damage added, addition max health, additional max mana, temp health, durability, additional properties, description
+        #name, type, cost, damage added, addition max health, additional max mana, armor rating, durability, additional properties, description
         self.wooden_shield = ['Wooden Shield', 'hand', 50, 0, 0, 0, 1, 50, 'none', '~ Better than no shield']
         self.rusty_helm = ['Rusty Helmet', 'head', 50, 0, 0, 0, 1, 50, 'none', '~ Ouch Ouch Ouch']
         self.rusty_chest = ['Rusty Chest Plate', 'chest', 50, 0, 0, 0, 1, 50, 'none', '~ Does this even work?']

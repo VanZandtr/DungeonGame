@@ -38,9 +38,14 @@ test = True
 #test items
 if test is True:
     items = Items()
-    player.inventory.append(items.test_potion)
+    player.inventory.append(items.test_potion.copy())
     player.currently_equipped.append(items.rusty_sword.copy())
     player.currently_equipped.append(items.rusty_sword.copy())
+    player.currently_equipped.append(items.rusty_helm.copy())
+    player.currently_equipped.append(items.rusty_chest.copy())
+
+
+
 
 
 def hint():
@@ -81,9 +86,9 @@ def level_up(player_arg):
                 print('The adventurer has learned', player_arg.unknown_skills[skill][0])
                 print()
                 #add the skill to known skills
-                player_arg.known_skills.append(player_arg.unknown_skills[skill])
+                player_arg.known_skills.append(player_arg.unknown_skills[skill].copy())
                 #remove the skill from unknown skills
-                skills_to_remove.append(player_arg.unknown_skills[skill])
+                skills_to_remove.append(player_arg.unknown_skills[skill].copy())
         
         for remove in skills_to_remove:        
             player_arg.unknown_skills.remove(remove)
@@ -261,12 +266,28 @@ while(True):
     
     elif command in ['U','u','unequip', 'Unequip']:
         print()
-        if player.weapon_equipped is 'none':
+        if len(player.currently_equipped) is 0:
             print("The adventurer has nothing equipped")
+            
         else:
-            print("The adventurer unequips their weapon")
-            player.equipment.append(player.weapon_equipped)
-            player.weapon_equipped = 'none'
+            for ae in player.currently_equipped:
+                print(ae)
+                
+            unequip = input('What would the adventurer like to unequip?>')
+            
+            item_found = False
+            for e in player.currently_equipped:
+                print(e[0])
+                if unequip == e[0]:
+                    print("found")
+                    player.currently_equipped.remove(e)
+                    player.equipment.append(e.copy())
+                    print("The adventurer unequips their ", unequip)
+                    item_found = True
+                    break
+            if item_found is False:
+                    print("The adventurer doesn't have that")
+
         print()            
         
     elif command in ['E','e','equip', 'Equip']:
@@ -294,7 +315,7 @@ while(True):
                                 
                 if len(player.currently_equipped) is 0:
                     player.equipment.remove(e);
-                    player.currently_equipped.append(e)
+                    player.currently_equipped.append(e.copy())
                 else:
                     print("in else statment")
                     for currently_equipped in player.currently_equipped:
@@ -319,17 +340,17 @@ while(True):
                                         unequip_hand = input('Which weapon would the adventurer like to unequip?>')
                                         for current_hands_equipped in player.currently_equipped:
                                             if unequip_hand == current_hands_equipped[0]:
-                                                player.equipment.append(current_hands_equipped);
+                                                player.equipment.append(current_hands_equipped.copy());
                                                 player.currently_equipped.remove(current_hands_equipped);
                                                 player.equipment.remove(e)
-                                                player.currently_equipped.append(e)
+                                                player.currently_equipped.append(e.copy())
                                                 break_loop_flag = True
                                                 break
                                     else:
                                         break
                                 else:
                                     player.equipment.remove(e)
-                                    player.currently_equipped.append(e)
+                                    player.currently_equipped.append(e.copy())
                                     break
                             else:
                                 unequip_hand_check = input('What would the adventurer like to unequipped a ' + e[1] + ' ? (Y/N)>')
@@ -340,16 +361,16 @@ while(True):
                                         unequip = input('Which ' + e[1] + ' would the adventurer like to unequip?>')
                                         for ce in player.currently_equipped:
                                             if unequip == ce[0]:
-                                                player.equipment.append(ce);
+                                                player.equipment.append(ce.copy());
                                                 player.currently_equipped.remove(ce);
                                                 player.equipment.remove(e)
-                                                player.currently_equipped.append(e)
+                                                player.currently_equipped.append(e.copy())
                                                 break_loop_flag = True
                                                 break
                                                     
                         else:
                             player.equipment.remove(e)
-                            player.currently_equipped.append(e)
+                            player.currently_equipped.append(e.copy())
                             break
                 break
         if item_not_found == True:                
