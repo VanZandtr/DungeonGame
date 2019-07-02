@@ -50,9 +50,11 @@ class Event:
                 print("There is a shop here.")
                 print()
                 
-                scripted_phrases = ['LOOK! NO TOUCH! Unless you have coin....']
+                scripted_phrases = ['LOOK! NO TOUCH! Unless you have coin....', 'WHO BE SNOOPI-. Oh Hello!', '*Rumaging* Take a look, but NO TOUCH! no touch.']
                 phrase = random.choice(scripted_phrases)
                 print (phrase)
+                print()
+                print("----------Shop----------")
                 
                 #Test shop
                 self.player.gold = 10000
@@ -61,18 +63,19 @@ class Event:
                 item_arr = random.sample(item_Class.veryeasy_shop_item, 5)
                 while(True):                
                     print()
-                    print('Equipment [name, cost, damage added, addition max health, additional max mana, mana restore, health restore, additional properties, description]:')
+                    print('Equipment [name, type, cost, damage added, addition max health, additional max mana, mana restore, armor rating (10), durability, additional properties, description]:')
                     for e in equipment_arr:
                         print(e)
                     print()
-                    print('Items [name, cost, max health increase, max mana increase, temp health increase, temp mana increase, description]:')
+                    print('Items [name, type, cost, max health increase, max mana increase, temp health increase, temp mana increase, description]:')
                     for i in item_arr:
                         print(i)
                     print()
                     
                     item_not_found = True
                     not_enough_gold = False
-                    
+                    print("----------Shop----------")
+                    print()
                     print('Gold:',self.player.gold)
                     print()
                     print('(q, Q, exit, Exit, Quit, quit) to leave.')
@@ -84,13 +87,13 @@ class Event:
                     else:
                         for e in equipment_arr:
                             if command == e[0]:
-                                if e[1] > self.player.gold:
+                                if e[2] > self.player.gold:
                                     print('NO GOLD! NO TOUCH!')
                                     not_enough_gold = True
                                     break
                                 else:
                                     item_not_found = False
-                                    self.player.gold -= e[1]
+                                    self.player.gold -= e[2]
                                     equipment_arr.remove(e)
                                     self.player.equipment.append(e)
                                     print('A fine purchase.')
@@ -98,13 +101,13 @@ class Event:
                             
                         for i in item_arr:
                             if command == i[0]:
-                                if i[1] > self.player.gold:
+                                if i[2] > self.player.gold:
                                     print('NO GOLD! NO TOUCH!')
                                     not_enough_gold = True
                                     break
                                 else:
                                     item_not_found = False
-                                    self.player.gold -= i[1]
+                                    self.player.gold -= i[2]
                                     item_arr.remove(i)
                                     self.player.inventory.append(i)
                                     print('A fine purchase.')

@@ -6,16 +6,22 @@ Created on Sun Apr 14 21:34:12 2019
 """
 class Items:
     def __init__(self):
-        #name, cost, damage added, addition max health, additional max mana, mana restore, health restore, additional properties, description
-        self.rusty_sword = ['Rusty Sword', 50, 3, 0, 0, 0, 0, 'none', '~ This sword has seen better days']
-        self.iron_sword = ['Iron Sword', 150, 5, 0, 0, 0, 0, 'none', '~ Average sword']
-        self.kal_thon_sword = ['Kal Thon (Legendary Sword)', 10000, 100, 100, 100, 100, 100, 'none', '~BEHOLD MY MIGHT']
+        #temp health/mana is a buffer until used up -> ie damage is taken from temp each round first
+        #name, type, cost, damage added, addition max health, additional max mana, temp health, durability, additional properties, description
+        self.wooden_shield = ['Wooden Shield', 'hand', 50, 0, 0, 0, 1, 50, 'none', '~ Better than no shield']
+        self.rusty_helm = ['Rusty Helmet', 'head', 50, 0, 0, 0, 1, 50, 'none', '~ Ouch Ouch Ouch']
+        self.rusty_chest = ['Rusty Chest Plate', 'chest', 50, 0, 0, 0, 1, 50, 'none', '~ Does this even work?']
+        self.rusty_legs = ['Rusty Greaves', 'legs', 50, 0, 0, 0, 1, 50, 'none', '~ You feel slower and maybe better protected']
+        self.rusty_sword = ['Rusty Sword', 'hand', 50, 3, 0, 0, 0, 5, 'none', '~ This sword has seen better days']
+        self.iron_sword = ['Iron Sword', 'hand', 150, 5, 0, 0, 0, 100, 'none', '~ Average sword']
+        self.kal_thon_sword = ['Kal Thon (Legendary Sword)', 'hand', 10000, 100, 100, 100, 10, 10000, 'none', '~BEHOLD MY MIGHT']
         
         #Potions
-        #name, cost, max health increase, max mana increase, temp health increase, temp mana increase, description
-        self.minor_health_potion = ['Minor Health Potion', 25, 0, 0, 10, 0, '~ Restores 10 points of health']
-        self.minor_mana_potion = ['Minor Health Potion', 25, 0, 0, 0, 15, '~ Restores 15 points of mana']
-        self.nic_tha_tal_potion = ['Potion of Nic\'Tha Tal', 25, 1000, -1000, 0, 0, '~ *whisper* Give me your power and you shall never die *whisper*']
+        #name, type, cost, max health increase, max mana increase, temp health increase, temp mana increase, description
+        self.minor_health_potion = ['Minor Health Potion', 'item', 25, 0, 0, 10, 0, '~ Restores 10 points of health']
+        self.minor_mana_potion = ['Minor Health Potion', 'item', 25, 0, 0, 0, 15, '~ Restores 15 points of mana']
+        self.nic_tha_tal_potion = ['Potion of Nic\'Tha Tal', 'item', 25, 1000, 1000, 0, 0, '~ *whisper* Give me your power and you shall never die *whisper*']
+        self.test_potion = ['Test', 'item', 25, 1000, 1000, 1000, 1000, '~ Test']
         
         self.veryeasy_equipment = ['rusty sword']
         self.easy_equipment = ['rusty sword']
@@ -31,30 +37,53 @@ class Items:
         self.veryhard_item = ['minor_health_potion']
         self.impossible_item = ['minor_health_potion']
         
-        self.veryeasy_shop_equipment = [self.rusty_sword,self.rusty_sword, self.rusty_sword, self.iron_sword, self.kal_thon_sword]
+        self.veryeasy_shop_equipment = [self.rusty_sword, self.rusty_helm, self.rusty_helm, self.rusty_legs, self.rusty_chest]
         
         self.veryeasy_shop_item = [self.minor_health_potion, self.minor_health_potion, self.minor_mana_potion, self.minor_mana_potion, self.nic_tha_tal_potion]
         
     def useItem(self, item, player):
         
-        #name, cost, max health increase, max mana increase, temp health increase, temp mana increase, description
+        #name, type, cost, max health increase, max mana increase, temp health increase, temp mana increase, description
         
         #max health
-        if item[2] > 0:
-            player.max_health += item[2];
+        print(item)
+        print(item[3])
+        if float(item[3]) > 0:
+            player.max_health += float(item[3]);
+            print("Max Health Increased")
+            print(player.max_health)
             
         #max mana
-        if item[3] > 0:
-            player.max_mana += item[3];
+        if float(item[4]) > 0:
+            player.max_mana += float(item[4]);
+            print("Max Mana Increased")
+            print(player.max_mana)
         
         #temp health
-        if item[4] > 0:            
-            if (player.health + item[4]) > player.max_health:
+        if float(item[5]) > 0:            
+            if (player.health + float(item[5])) > player.max_health:
                 player.health = player.max_health;
+            else:
+                player.health += float(item[5])
+                
+            print("Health Increased")
+            print(player.health)
         
         #temp mana
-        if item[5] > 0:            
-            if (player.current_mana + item[5]) > player.max_mana:
+        if float(item[6]) > 0:            
+            if (player.current_mana + float(item[6])) > player.max_mana:
                 player.current_mana = player.max_mana;
+            else:
+                player.current_mana += float(item[6])
+                
+            print("Mana Increased")
+            print(player.current_mana)
+            
+        #------------------------------------------
+        #make negative effect potions
+        #------------------------------------------
+    
+        
+        player.inventory.remove(item)
              
     

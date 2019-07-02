@@ -53,12 +53,12 @@ class Minions:
             if item_chance > .9:
                 new_item = random.choice(item_Class.veryeasy_item)
                 print('Found:',new_item)
-                self.player.inventory.append(new_item)
+                self.player.inventory.append(new_item.copy())
                 
             if equipment_chance > .9:
                 new_equipment = random.choice(item_Class.veryeasy_equipment)
                 print('Found:', new_equipment)
-                self.player.equipment.append(new_equipment)
+                self.player.equipment.append(new_equipment.copy())
                   
         elif minion_difficulty is 'easy':
             gold_output = math.floor(0.5*gold_output) + gold_output
@@ -67,12 +67,12 @@ class Minions:
             if item_chance > .8:
                 new_item = random.choice(item_Class.easy_item)
                 print('Found:',new_item)
-                self.player.inventory.append(new_item)
+                self.player.inventory.append(new_item.copy)
                 
             if equipment_chance > .8:
                 new_equipment = random.choice(item_Class.easy_equipment)
                 print('Found:', new_equipment)
-                self.player.equipment.append(new_equipment)
+                self.player.equipment.append(new_equipment.copy())
             
         elif minion_difficulty is 'medium':
             gold_output = 2*gold_output
@@ -81,12 +81,12 @@ class Minions:
             if item_chance > .6:
                 new_item = random.choice(item_Class.medium_item)
                 print('Found:',new_item)
-                self.player.inventory.append(new_item)
+                self.player.inventory.append(new_item.copy())
                 
             if equipment_chance > .6:
                 new_equipment = random.choice(item_Class.medium_equipment)
                 print('Found:', new_equipment)
-                self.player.equipment.append(new_equipment)
+                self.player.equipment.append(new_equipment.copy())
             
         elif minion_difficulty is 'hard':
             gold_output = math.floor(4*gold_output) + gold_output
@@ -95,12 +95,12 @@ class Minions:
             if item_chance > .4:
                 new_item = random.choice(item_Class.hard_item)
                 print('Found:',new_item)
-                self.player.inventory.append(new_item)
+                self.player.inventory.append(new_item.copy())
                 
             if equipment_chance > .4:
                 new_equipment = random.choice(item_Class.hard_equipment)
                 print('Found:', new_equipment)
-                self.player.equipment.append(new_equipment)
+                self.player.equipment.append(new_equipment.copy())
             
         elif minion_difficulty is 'very hard':
             gold_output = 7*gold_output
@@ -109,12 +109,12 @@ class Minions:
             if item_chance > .2:
                 new_item = random.choice(item_Class.veryhard_item)
                 print('Found:',new_item)
-                self.player.inventory.append(new_item)
+                self.player.inventory.append(new_item.copy())
                 
             if equipment_chance > .2:
                 new_equipment = random.choice(item_Class.veryhard_equipment)
                 print('Found:', new_equipment)
-                self.player.equipment.append(new_equipment)
+                self.player.equipment.append(new_equipment.copy())
             
         else:
             gold_output = 10*gold_output
@@ -123,12 +123,12 @@ class Minions:
             if item_chance > 0:
                 new_item = random.choice(item_Class.impossible_item)
                 print('Found:',new_item)
-                self.player.inventory.append(new_item)
+                self.player.inventory.append(new_item.copy())
                 
             if equipment_chance > 0:
                 new_equipment = random.choice(item_Class.impossible_equipment)
                 print('Found:', new_equipment)
-                self.player.equipment.append(new_equipment)
+                self.player.equipment.append(new_equipment.copy())
 
         for minion in range(minion_quantity):
             gold_output+=gold_output
@@ -190,12 +190,43 @@ class Minions:
                 if command in ['a','A','attack', 'Attack']:
                     
                     damage = 0
+                    weapon = None
+                    
                     #get damage number
-                    if self.player.weapon_equipped == 'none':
+                    hands_counter = 0
+                    for e in self.player.currently_equipped:
+                        if e[1] == 'hand':
+                            hands_counter +=1;
+                            
+                    if hands_counter == 0:    
                         damage = math.ceil(random.uniform(1,4))
+                        
+                    elif hands_counter == 1:
+                        for e in self.player.currently_equipped:
+                            if e[1] == 'hand':
+                                damage = e[3]
+                                weapon = e
                     else:
-                        #get weapon damage
-                        damage = 10
+                        weapon_selected = False
+                        while(True):
+                            if weapon_selected is True:
+                                break
+                            
+                            for e in self.player.currently_equipped:
+                                if e[1] == 'hand':
+                                    print(e)
+
+                            weapon_select = input('What weapon would the adventurer like to use?>')
+                            for e in self.player.currently_equipped:
+                                if weapon_select == e[0]:
+                                    damage = e[3]
+                                    weapon = e
+                                    weapon_selected = True
+                                    break
+                                else:
+                                    print("The adventurer does not have that weapon")
+                                    break
+
                     
                     if minion_quantity != 1:
                         print('Which will the adventurer attack?')
@@ -225,7 +256,21 @@ class Minions:
                             else:
                                 print(minions_display[minion_number-1][0],'has taken',damage,'damage')
                                 minions_display[minion_number-1][1] -= damage
+                                                            
+                            damage_to_weapon_chance = math.ceil(random.uniform(1,4))
+                            #if damage_to_weapon_chance == 4:
+                            if damage_to_weapon_chance > 0:
+                                damage_to_weapon = math.ceil(random.uniform(1, float(weapon[7])/4))
+                                print('The adventurer\'s ',e[0],' sustained ',damage_to_weapon,' damage')
+                                e[7] = float(weapon[7]) - damage_to_weapon
+                                if e[7] <= 0:
+                                    print('The adventurer\'s',e[0], 'was destroyed')
+                                    self.player.currently_equipped.remove(e)
+                                
+                                
                             turn_not_over = False
+                            
+                            
                             
                         elif minion_number in display_number and minions_display[minion_number-1][1] is 0 :
                             print('The adventure has already killed this enemy')
@@ -357,22 +402,23 @@ class Minions:
 
                     
                 elif command in ['i','I','item', 'Item', 'use Item', 'use item', 'Use Item', 'Use item']:
-                    print('The adventurer uses an item')
-                    print()
-                    
-                    for item in range(len(self.player.inventory)):
-                            print(item[0],' ', item[6]);
+                    if len(self.player.inventory) is 0:
+                        print("The adventurer has nothing to use")
+                        turn_not_over = True
                         
-                    item_command = input('>')
+                        
+                    for item in self.player.inventory:
+                            print(item[0], item[7]);
+                        
+                    item_command = input('Which item would the adventurer like to use?>')
                     item_found = False
-                    for item in range(len(self.player.inventory)):
+                    for item in self.player.inventory:
                         if item_command == item[0]:
                             item_found = True
-                            use_item = item[0];
                             
                             new_item = Items();
                             #use the item
-                            new_item.useItem(use_item, self.player);
+                            new_item.useItem(item, self.player);
                             print('item removed')
                             print()
                             
