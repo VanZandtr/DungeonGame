@@ -3,6 +3,8 @@ from Dungeon_Events import Event
 from Dungeon_Player import Player
 from Dungeon_Skills import Skills
 from Dungeon_Items import Items
+import numpy as np
+import math as math
 
 
 mapsize = 10
@@ -10,18 +12,19 @@ new_Dungeon = DungeonGenerator(mapsize)
 new_Dungeon.makeDungeon()
 dungeon_map = new_Dungeon.map
 
-'''
+
 print("----------final----------")
 for room in dungeon_map:
     print("id",room.room_id)
-    print("north",room.north)
-    print("south",room.south)
-    print("east",room.east)
-    print("west",room.west)
+    print("type",room.room_type)
+    #print("north",room.north)
+    #print("south",room.south)
+    #print("east",room.east)
+    #print("west",room.west)
     print()
     print()
 print("----------final----------")
-'''
+
 
 previous_room = 0
 current_room = 0
@@ -44,9 +47,34 @@ if test is True:
     player.currently_equipped.append(items.rusty_helm.copy())
     player.currently_equipped.append(items.rusty_chest.copy())
 
+bounds = 11
+matrix = np.chararray((bounds,bounds), unicode=True)
+y_coor = math.floor(bounds/2)
+x_coor = math.floor(bounds/2)
+    
+def gen_screen_map():
+    matrix[:]='.'
+    matrix[x_coor,y_coor] = '1'
+
+
+gen_screen_map()
 
 
 
+def reset_map():
+    for i in range(bounds):
+        for j in range(bounds):
+            if matrix[i,j] == '*':
+                matrix[i,j] = '.'
+
+def update_screen_map():
+    for i in range(bounds):
+        for j in range(bounds):
+            if matrix[i,j] not in ['x','0']:
+                matrix[i,j]='.'
+    matrix[x_coor,y_coor] = '1'
+
+        
 
 def hint():
     print()
@@ -115,6 +143,7 @@ while(need_class):
         
         
 while(True):
+    map_marker = '0'
     
     if player.level >= len(player.level_array):
         if (max_level_alerted is False):
@@ -144,6 +173,17 @@ while(True):
     elif map_room.room_type is ('event_enemy_encounter' or 'event_enemy_encounter_boss') and player.ran_away is True:
         print('The adventurer flees to the previous room', previous_room)
         player.ran_away = False
+        if map_room.north == previous_room:
+            x_coor -= 1
+        elif map_room.south == previous_room:
+            x_coor += 1
+        elif map_room.east == previous_room:
+            y_coor += 1
+        else:
+            y_coor -= 1
+            
+        reset_map()
+        update_screen_map()
         current_room = previous_room
         continue
     
@@ -151,15 +191,67 @@ while(True):
         #shop leaves
         map_room.room_type = 'empty_shop'
         
+    elif map_room.room_type is 'event_stairs' and player.descend is False:
+        map_marker = 'x'
+
+    elif map_room.room_type is 'event_stairs' and player.descend is True:
+        player.descend = False
+
+        previous_room = 0
+        current_room = 0
+
+        new_Dungeon.room_id = 0
+        new_Dungeon = DungeonGenerator(mapsize)
+        new_Dungeon.makeDungeon()
+        dungeon_map = new_Dungeon.map
+        #map_room = dungeon_map[current_room]
+        #ava_rooms = []
+        #print('The adventurer is in room',current_room,'.')
+    
+        #new_Event = Event(map_room.room_type, player)
+        #new_Event.fetchEvent()
+        
+        y_coor = math.floor(bounds/2)
+        x_coor = math.floor(bounds/2)
+        print(x_coor, y_coor)
+        gen_screen_map()
+        print(x_coor, y_coor)
+        
+        continue
+       
+        
+        
+        
     
     if map_room.north is not -1:
         ava_rooms.append("North")
+        if matrix[x_coor - 1, y_coor] not in  ['0', 'x']:
+            print("North",matrix[x_coor - 1, y_coor])
+            matrix[x_coor - 1, y_coor] = '*'
+            
     if map_room.south is not -1:
         ava_rooms.append("South")
+        if matrix[x_coor + 1, y_coor] not in  ['0', 'x']:
+            print("South",matrix[x_coor + 1, y_coor])
+            matrix[x_coor +1, y_coor] = '*'
+            
     if map_room.east is not -1:
         ava_rooms.append("East")
+        if matrix[x_coor, y_coor + 1] not in ['0','x']:
+            print("east", matrix[x_coor, y_coor + 1])
+            matrix[x_coor, y_coor + 1] = '*'
+            
     if map_room.west is not -1:
         ava_rooms.append("West")
+        if matrix[x_coor, y_coor - 1] not in ['0','x']:
+            print("west",matrix[x_coor, y_coor - 1])
+            matrix[x_coor, y_coor - 1] = '*'
+            
+        
+    for i in range(bounds):
+        for j in range(bounds):
+            print(matrix[i,j],end='  ')
+        print('\n')
     
     print('There is a room to the:', end = " ")
     for room in ava_rooms:
@@ -180,6 +272,10 @@ while(True):
         print()
         if map_room.north is not -1:
             print("The adventurer moves north.")
+            matrix[x_coor, y_coor] = map_marker
+            x_coor-=1
+            matrix[x_coor, y_coor] = '1'
+            reset_map()
             previous_room = current_room
             current_room = map_room.north
             print()
@@ -192,6 +288,10 @@ while(True):
         print()
         if map_room.south is not -1:
             print("The adventurer moves south.")
+            matrix[x_coor, y_coor] = map_marker
+            x_coor+=1
+            matrix[x_coor, y_coor] = '1'
+            reset_map()
             previous_room = current_room
             current_room = map_room.south
             print()
@@ -204,6 +304,10 @@ while(True):
         print()
         if map_room.east is not -1:
             print("The adventurer moves east.")
+            matrix[x_coor, y_coor] = map_marker
+            y_coor+=1
+            matrix[x_coor, y_coor] = '1'
+            reset_map()
             previous_room = current_room
             current_room = map_room.east
             print()
@@ -216,6 +320,10 @@ while(True):
         print()
         if map_room.west is not -1:
             print("The adventurer moves west.")
+            matrix[x_coor, y_coor] = map_marker
+            y_coor-=1
+            matrix[x_coor, y_coor] = '1'
+            reset_map()
             previous_room = current_room
             current_room = map_room.west
             print()

@@ -465,16 +465,23 @@ class Minions:
                                 #if damage_to_weapon_chance == 4:
                                 if damage_to_armor_chance > 0:
                                     damage_to_armor = math.ceil(random.uniform(1, armor[6]/4))
-                                    print('The adventurer\'s ',armor[0],' sustained ',damage_to_armor,' damage')
+                                    print('The adventurer\'s ',armor[0],' sustained ',damage_to_armor,' damage.')
                                     armor[7] = float(armor[7]) - damage_to_armor
                                     if armor[7] <= 0:
-                                        print('The adventurer\'s',armor[0], 'was destroyed')
+                                        print('The adventurer\'s',armor[0], 'was destroyed.')
                                         self.player.currently_equipped.remove(e)
-                                print(armor)
                     
                         armor_absorption = armor_modifier * armor_rating * self.player.level
                         
-                        self.player.health -= (damage - armor_absorption)
+                        if damage - armor_absorption <= 0:
+                            print("The adverturer\'s armor absorbed the blow.")
+                            damage = 0
+                        else:
+                            print("The adventurer sustained ", damage," damage.")
+                            damage -= armor_absorption
+                        
+                        self.player.health -= damage
+                        
                         
                         
             print()

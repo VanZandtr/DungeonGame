@@ -17,6 +17,7 @@ class Player:
         self.current_mana = 100
         self.run_percent = .25
         self.ran_away = False
+        self.descend = False
         #self.weapon_equipped = 'none'
         
         self.is_dead = False

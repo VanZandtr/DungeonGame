@@ -130,11 +130,24 @@ class Event:
                 break
             
             elif self.event_id is 'dead_enemies':
-                print('The adventurers past battle lies before them')
+                print('The adventurers past battle lies before them.')
                 break
             
             elif self.event_id is 'empty_shop':
-                print('An empty stall lies before the adventurer. It seems the shop has left')
+                print('An empty stall lies before the adventurer. It seems the shop has left.')
+                break
+            elif self.event_id is 'event_stairs':
+                print('Before the Adventurer is a set of stairs descending into darkness.')
+                command = input('Will the Adventurer take the descent? (Y/N)>')
+                if command in ['y','Y','Yes','yes']:
+                    print('The Adventurer descends.')
+                    self.player.descend = True
+                    break
+                else:
+                    print("The Adventurer decides to return later.")
+                    break
+
+                    
                 break
                 
             else:
