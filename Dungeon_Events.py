@@ -118,8 +118,16 @@ class Event:
                 break                                
                 
             elif self.event_id is 'event_bonfire':
-                print("There is a bonfire here.")
-                break
+                sit_command = input("A bonfire smolders gentle before the Adventurer. Will the Adventurer rest? (Y/N)>")
+                if sit_command in ['y','Y','Yes','yes']:
+                    print('The Adventurer sits.')
+                    self.player.burn_bonfire = True
+                    print("The adventure repairs(Weapon/Armor Durability), sleeps(HP), meditates (EXP)")
+                    break
+                else:
+                    print("The Adventurer decides to return later.")
+                    break
+                
                 
             elif self.event_id is 'event_random_positive':
                 print("There is a random event here.")
@@ -146,6 +154,9 @@ class Event:
                 else:
                     print("The Adventurer decides to return later.")
                     break
+            elif self.event_id is 'burned_bonfire':
+                print('Ash lays where a fire once burned.')
+                break
 
                     
                 break

@@ -16,8 +16,7 @@ class Player:
         self.max_mana = 100
         self.current_mana = 100
         self.run_percent = .25
-        self.ran_away = False
-        self.descend = False
+        
         #self.weapon_equipped = 'none'
         
         self.is_dead = False
@@ -32,4 +31,9 @@ class Player:
         
         #get from Dungeon_Skills
         self.unknown_skills = []
+        
+        #room indicators
+        self.ran_away = False
+        self.descend = False
+        self.burn_bonfire = False
     

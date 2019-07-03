@@ -15,11 +15,13 @@ class DungeonGenerator:
         self.size = size
         self.map = []
         #self.event = ['event_enemy_encounter', 'event_enemy_encounter', 'event_enemy_encounter', 'event_enemy_encounter_boss', 'event_shop', 'event_bonfire', 'event_bonfire', 'event_random_positive', 'event_random_positive', 'event_empty', 'event_empty']
-        self.event = ['event_stairs', 'event_empty']
+        self.event = ['event_bonfire', 'event_stairs']
         self.has_stair_event = False
         
     def makeDungeon(self):
-        self.event = ['event_stairs', 'event_empty']
+        #reset events on stair descent
+        events = self.event.copy()
+        
         self.has_stair_event = False
         counter = 0
         loop = iter(range(0,self.size))
@@ -53,9 +55,9 @@ class DungeonGenerator:
                 
                 
                 if north_flag in rooms_to_add:
-                    new_event = random.choice(self.event)
+                    new_event = random.choice(events)
                     if new_event == "event_stairs":
-                        self.event.remove("event_stairs")
+                        events.remove("event_stairs")
                         self.has_stair_event = True
                         
                     north_id = self.room_id + 1
@@ -66,9 +68,9 @@ class DungeonGenerator:
                     self.map.insert(self.room_id, north_room)
                     
                 if south_flag in rooms_to_add:
-                    new_event = random.choice(self.event)
+                    new_event = random.choice(events)
                     if new_event == "event_stairs":
-                        self.event.remove("event_stairs")
+                        events.remove("event_stairs")
                         self.has_stair_event = True
                     
                     south_id = self.room_id + 1
@@ -79,9 +81,9 @@ class DungeonGenerator:
                     self.map.insert(self.room_id, south_room)
                     
                 if east_flag in rooms_to_add:
-                    new_event = random.choice(self.event)
+                    new_event = random.choice(events)
                     if new_event == "event_stairs":
-                        self.event.remove("event_stairs")
+                        events.remove("event_stairs")
                         self.has_stair_event = True
                         
                     east_id = self.room_id + 1
@@ -92,9 +94,9 @@ class DungeonGenerator:
                     self.map.insert(self.room_id, east_room)
                     
                 if west_flag in rooms_to_add:
-                    new_event = random.choice(self.event)
+                    new_event = random.choice(events)
                     if new_event == "event_stairs":
-                        self.event.remove("event_stairs")
+                        events.remove("event_stairs")
                         self.has_stair_event = True
                     
                     west_id = self.room_id + 1
@@ -112,22 +114,19 @@ class DungeonGenerator:
                     random_room = random.choice(self.map)
                     random_door = random.uniform(0,4)
                     
-                    print(self.has_stair_event)
-                    new_event = random.choice(self.event)
+                    new_event = random.choice(events)
                     
                     if counter == 9 and self.has_stair_event == False:
-                        print("1")
                         new_event = 'event_stairs'
                         self.has_stair_event = True
                    
                     elif new_event == 'event_stairs' and self.has_stair_event == False:
-                        print("2")
-                        self.event.remove('event_stairs')
+                        events.remove('event_stairs')
                         self.has_stair_event = True
                         new_event = 'event_stairs'
                         
                     else:
-                        print("3")
+                        pass
 
                     
                     if random_door < 1 and random_room.north is -1:

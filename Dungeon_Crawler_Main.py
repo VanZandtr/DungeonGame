@@ -12,7 +12,7 @@ new_Dungeon = DungeonGenerator(mapsize)
 new_Dungeon.makeDungeon()
 dungeon_map = new_Dungeon.map
 
-
+'''
 print("----------final----------")
 for room in dungeon_map:
     print("id",room.room_id)
@@ -24,7 +24,7 @@ for room in dungeon_map:
     print()
     print()
 print("----------final----------")
-
+'''
 
 previous_room = 0
 current_room = 0
@@ -32,6 +32,7 @@ current_room = 0
 need_class = True
 max_level_alerted = False
 classes = ['Wizard','Priest']
+map_markers = ['0', 'x', '^']
 
 player = Player()
 skills = Skills()
@@ -88,6 +89,7 @@ def hint():
     print('Skills:','s, S, skills, Skills')
     print('Equip:','e, E, equip, Equip')
     print('Unequip:','u, U, unequip, Unequip')
+    print('Stuck?:','stuck', 'Stuck', "DELETE THIS AFTER MAP IS FIXED")
     print('Hint:','display this message')
     print("----------Hint----------")
     print()
@@ -191,6 +193,14 @@ while(True):
         #shop leaves
         map_room.room_type = 'empty_shop'
         
+    elif map_room.room_type is 'event_bonfire' and player.burn_bonfire == True:
+        #shop leaves
+        map_room.room_type = 'burned_bonfire'
+        player.burn_bonfire == False
+    
+    elif map_room.room_type is 'event_bonfire' and player.burn_bonfire == False:
+        map_marker = '^'
+        
     elif map_room.room_type is 'event_stairs' and player.descend is False:
         map_marker = 'x'
 
@@ -204,47 +214,33 @@ while(True):
         new_Dungeon = DungeonGenerator(mapsize)
         new_Dungeon.makeDungeon()
         dungeon_map = new_Dungeon.map
-        #map_room = dungeon_map[current_room]
-        #ava_rooms = []
-        #print('The adventurer is in room',current_room,'.')
-    
-        #new_Event = Event(map_room.room_type, player)
-        #new_Event.fetchEvent()
         
         y_coor = math.floor(bounds/2)
         x_coor = math.floor(bounds/2)
-        print(x_coor, y_coor)
+      
         gen_screen_map()
-        print(x_coor, y_coor)
-        
+    
         continue
-       
-        
-        
         
     
     if map_room.north is not -1:
         ava_rooms.append("North")
-        if matrix[x_coor - 1, y_coor] not in  ['0', 'x']:
-            print("North",matrix[x_coor - 1, y_coor])
+        if matrix[x_coor - 1, y_coor] not in map_markers:
             matrix[x_coor - 1, y_coor] = '*'
             
     if map_room.south is not -1:
         ava_rooms.append("South")
-        if matrix[x_coor + 1, y_coor] not in  ['0', 'x']:
-            print("South",matrix[x_coor + 1, y_coor])
+        if matrix[x_coor + 1, y_coor] not in map_markers:
             matrix[x_coor +1, y_coor] = '*'
             
     if map_room.east is not -1:
         ava_rooms.append("East")
-        if matrix[x_coor, y_coor + 1] not in ['0','x']:
-            print("east", matrix[x_coor, y_coor + 1])
+        if matrix[x_coor, y_coor + 1] not in map_markers:
             matrix[x_coor, y_coor + 1] = '*'
             
     if map_room.west is not -1:
         ava_rooms.append("West")
-        if matrix[x_coor, y_coor - 1] not in ['0','x']:
-            print("west",matrix[x_coor, y_coor - 1])
+        if matrix[x_coor, y_coor - 1] not in map_markers:
             matrix[x_coor, y_coor - 1] = '*'
             
         
@@ -387,9 +383,9 @@ while(True):
             for e in player.currently_equipped:
                 print(e[0])
                 if unequip == e[0]:
-                    print("found")
                     player.currently_equipped.remove(e)
                     player.equipment.append(e.copy())
+                    print()
                     print("The adventurer unequips their ", unequip)
                     item_found = True
                     break
@@ -533,6 +529,10 @@ while(True):
         print()
     elif command in ['H','h','hint', 'Hint']:
         hint()
+    
+    elif command in ['Stuck', 'stuck']:
+        map_room.room_type = 'event_stairs'
+        player.descend = True
         
     else:
         print()
