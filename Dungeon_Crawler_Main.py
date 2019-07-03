@@ -531,6 +531,7 @@ while(True):
         hint()
     
     elif command in ['Stuck', 'stuck']:
+        print("HAVE THIS CHECK IF NO ROOM HAD THE STAIRS EVENT FIRST!")
         map_room.room_type = 'event_stairs'
         player.descend = True
         
