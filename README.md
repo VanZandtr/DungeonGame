@@ -15,6 +15,8 @@ You awake to unknown dungeon guided by an unknown voice. Face monsters and hazar
 - Room Remembering (i.e. enemies stay dead, shop can't be visited twice)
 - Randomized Dungeon
 - Multiple Enemy types
+- Multiple Floors
+- Real Time Map
 
 ## How to Play
 1.) Download files  
@@ -44,7 +46,7 @@ You awake to unknown dungeon guided by an unknown voice. Face monsters and hazar
    * Holds all skills and class options.
 
 ## Future Work
-- Multiple floors w/ exit           (Added May 2019)
+- <s>Multiple floors           (Added May 2019)</s> (Completed 7/3/2019)
 - Implement more room types (traps, random encounters, etc.)(Added May 2019)  
 - Unique Boss fights                (Added May 2019)  
 - Furthur class skill design        (Added May 2019)  
@@ -52,6 +54,7 @@ You awake to unknown dungeon guided by an unknown voice. Face monsters and hazar
 - Turn Dungeon_Minions.py into two scripts (Combat and Minions). (Added May 2019)  
 - Change Dungeon_Minions.py, Dungeon_Skills.py, and Dungeon_Items.py into Tables (ie Database).(Added May 2019) 
 - <s>Make items/equipment usable in combat           (Added June 2019)</s> (Completed 7/2/2019)
+- Add Exit (Added 7/3/2019)
 
 ## Update (7/2/2019)
 - Added Armor and Weapon Durablitity
@@ -60,3 +63,10 @@ You awake to unknown dungeon guided by an unknown voice. Face monsters and hazar
 - Added Armor Absorption with scaling (# of armor pieces (Max 3) * armor rating of each piece (1 - 10) * player level)
 - Fixed an issue with weapons and armor sharing damage
 - Fixed weapon and item usage (in progress before)
+
+## Update (7/3/2019)
+- Added Bonfire event frame (marker and flow, no functionality yet)
+- Added Real Time Map that tracks events and rooms via Map Markers
+- Added a Stairs event to traverse deeper in the dungeon
+- Added a "Stuck" event if the map doesn't generate a stairs event (rare, known issue)
+- Cleaned up print out minorly (deleted some print statements)
