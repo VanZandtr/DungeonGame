@@ -118,47 +118,121 @@ class Event:
                 break                                
                 
             elif self.event_id is 'event_bonfire':
-                sit_command = input("A bonfire smolders gentle before the Adventurer. Will the Adventurer rest? (Y/N)>")
-                if sit_command in ['y','Y','Yes','yes']:
+                sit_flag = input("A bonfire smolders gentle before the Adventurer. Will the Adventurer rest? (Y/N)>")
+                if sit_flag in ['y','Y','Yes','yes']:
                     print('The Adventurer sits.')
                     self.player.burn_bonfire = True
-                    print("The adventure repairs(Weapon/Armor Durability), sleeps(HP), meditates (EXP)")
+                    
+                    print("What would the adventurer like to do?")
+                    print()
+                    print("Sleep    Current HP: ", self.player.health)
+                    print("Repair Equipment")
+                    print("Mediate  Current EXP: ", self.player.exp)
+                    print()
+                    
+                    while(True):
+                        sit_command = input(">")
+                        if sit_command in ['sleep','Sleep','s','S']:
+                            if self.player.health >= self.player.max_health:
+                                print("The adventurer feels extra rested.")
+                                self.player.health += self.player.overheal_amount
+                                print(self.player.health)
+                                break
+                            
+                            print("The adventurer sleeps.")
+                            self.player.health += self.player.rest_heal_amount
+                            print("The adventurer gains ", self.player.rest_heal_amount," experience.")
+                            break
+                        
+                        elif sit_command in ['repair','Repair','r','R', 'repair equipment', 'Repair Equipment']:
+                            all_items = Items()
+                            
+                            broken = []
+                            for broken_equipment in self.player.currently_equipped:
+                                if broken_equipment[7] < getattr(all_items, broken_equipment[10])[7]:
+                                    broken.append(broken_equipment)
+                            
+                            for broken_equipment in self.player.equipment:
+                                if broken_equipment[7] < getattr(all_items, broken_equipment[10])[7]:
+                                    broken.append(broken_equipment)
+                                    
+                            if not broken:
+                                print("The adventurer has nothing to repair.")
+                                continue
+                            else:
+                                cont_loop = True
+                                while(cont_loop):
+                                    print()
+                                    for b_e in broken:
+                                        print (b_e[0])
+                                    print()
+                                    
+                                    repair_command = input("What would the adventurer like to repair? (Note: Items equipped are repaired first)")
+                                    
+                                    for item in broken:
+                                        if repair_command == item[0]:
+                                           
+                                            item[7] += self.player.fix_amount
+                                            
+                                            print("The adventurer fixes a ", item[0]," by ", self.player.fix_amount, " for a total of", item[7], ".")
+                                            
+                                            cont_loop = False
+                                            break
+                                        else:
+                                            print("The adventurer does not have a ", item[0],".")
+                                            continue
+                                break
+                                    
+                        elif sit_command in ['mediate','Mediate','m','M']:
+                            print("The adventurer mediates.")
+                            self.player.exp += self.player.rest_exp_amount
+                            print("The adventurer gains ", self.player.rest_exp_amount," experience.")
+                            break
+                        else:
+                            print("The adventurer cannot do that.")
+                            continue
+                    print()   
                     break
                 else:
-                    print("The Adventurer decides to return later.")
+                    print("The adventurer decides to return later.")
                     break
                 
                 
             elif self.event_id is 'event_random_positive':
                 print("There is a random event here.")
+                print()
                 break
                 
             elif self.event_id is 'event_empty':
                 print("There is nothing here.")
+                print()
                 break
             
             elif self.event_id is 'dead_enemies':
                 print('The adventurers past battle lies before them.')
+                print()
                 break
             
             elif self.event_id is 'empty_shop':
                 print('An empty stall lies before the adventurer. It seems the shop has left.')
+                print()
                 break
             elif self.event_id is 'event_stairs':
+                print()
                 print('Before the Adventurer is a set of stairs descending into darkness.')
                 command = input('Will the Adventurer take the descent? (Y/N)>')
                 if command in ['y','Y','Yes','yes']:
                     print('The Adventurer descends.')
                     self.player.descend = True
+                    print()
                     break
                 else:
+                    print()
                     print("The Adventurer decides to return later.")
                     break
             elif self.event_id is 'burned_bonfire':
                 print('Ash lays where a fire once burned.')
-                break
-
-                    
+                print()
                 break
                 
             else:

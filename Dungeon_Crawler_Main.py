@@ -24,7 +24,7 @@ for room in dungeon_map:
     print()
     print()
 print("----------final----------")
-'''
+'''    
 
 previous_room = 0
 current_room = 0
@@ -46,7 +46,8 @@ if test is True:
     player.currently_equipped.append(items.rusty_sword.copy())
     player.currently_equipped.append(items.rusty_sword.copy())
     player.currently_equipped.append(items.rusty_helm.copy())
-    player.currently_equipped.append(items.rusty_chest.copy())
+    player.equipment.append(items.rusty_chest.copy())
+    player.equipment[0][7] -= 5
 
 bounds = 11
 matrix = np.chararray((bounds,bounds), unicode=True)
@@ -334,8 +335,6 @@ while(True):
         print('Class:', player.player_class)
         print('Level:', player.level)
         print('Health:', player.health)
-        print('Exp:', player.exp)
-        print('Next Level up:', player.level_array[player.level])
         print('Gold:', player.gold)
         
         print()
@@ -486,6 +485,8 @@ while(True):
     elif command in ['S', 's', 'Skills', 'skills']:
         print()
         print("----------Skills----------")
+        print('Exp:', player.exp)
+        print('Next Level up:', player.level_array[player.level])
         print('Max Mana:', player.max_mana)
         print('Mana:', player.current_mana)
         print()

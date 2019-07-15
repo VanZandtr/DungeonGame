@@ -7,14 +7,14 @@ Created on Sun Apr 14 21:34:12 2019
 class Items:
     def __init__(self):
         #temp health/mana is a buffer until used up -> ie damage is taken from temp each round first
-        #name, type, cost, damage added, addition max health, additional max mana, armor rating, durability, additional properties, description
-        self.wooden_shield = ['Wooden Shield', 'hand', 50, 0, 0, 0, 1, 50, 'none', '~ Better than no shield']
-        self.rusty_helm = ['Rusty Helmet', 'head', 50, 0, 0, 0, 1, 50, 'none', '~ Ouch Ouch Ouch']
-        self.rusty_chest = ['Rusty Chest Plate', 'chest', 50, 0, 0, 0, 1, 50, 'none', '~ Does this even work?']
-        self.rusty_legs = ['Rusty Greaves', 'legs', 50, 0, 0, 0, 1, 50, 'none', '~ You feel slower and maybe better protected']
-        self.rusty_sword = ['Rusty Sword', 'hand', 50, 3, 0, 0, 0, 5, 'none', '~ This sword has seen better days']
-        self.iron_sword = ['Iron Sword', 'hand', 150, 5, 0, 0, 0, 100, 'none', '~ Average sword']
-        self.kal_thon_sword = ['Kal Thon (Legendary Sword)', 'hand', 10000, 100, 100, 100, 10, 10000, 'none', '~BEHOLD MY MIGHT']
+        #name 0, type 1, cost 2, damage added 3, addition max health 4, additional max mana 5, armor rating 6, durability 7, additional properties 8, description 9, creation name 10
+        self.wooden_shield = ['Wooden Shield', 'hand', 50, 0, 0, 0, 1, 10, 'none', '~ Better than no shield', 'wooden_shield']
+        self.rusty_helm = ['Rusty Helmet', 'head', 50, 0, 0, 0, 1, 10, 'none', '~ Ouch Ouch Ouch', 'rusty_helm']
+        self.rusty_chest = ['Rusty Chest Plate', 'chest', 50, 0, 0, 0, 1, 10, 'none', '~ Does this even work?', 'rusty_chest']
+        self.rusty_legs = ['Rusty Greaves', 'legs', 50, 0, 0, 0, 1, 10, 'none', '~ You feel slower and maybe better protected', 'rusty_legs']
+        self.rusty_sword = ['Rusty Sword', 'hand', 50, 3, 0, 0, 0, 10, 'none', '~ This sword has seen better days', 'rusty_sword']
+        self.iron_sword = ['Iron Sword', 'hand', 150, 5, 0, 0, 0, 100, 'none', '~ Average sword', 'iron_sword']
+        self.kal_thon_sword = ['Kal Thon (Legendary Sword)', 'hand', 10000, 100, 100, 100, 10, 10000, 'none', '~BEHOLD MY MIGHT', 'kal_thon_sword']
         
         #Potions
         #name, type, cost, max health increase, max mana increase, temp health increase, temp mana increase, description
