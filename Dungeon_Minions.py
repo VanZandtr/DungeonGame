@@ -11,8 +11,7 @@ from Dungeon_Skills import Skills
 from Dungeon_Items import Items
 
 class Minions:
-    def __init__(self, minion_id, player):
-        self.minion_id = minion_id
+    def __init__(self, player):
         self.player = player
         
         #name,health,attack_type,attack_strength,quantity,damage,attack miss chance, power name, power damage, power chance
@@ -23,15 +22,13 @@ class Minions:
         
         
         
-    def spawnMinion(self):
-        minion_id = self.minion_id
+    def spawnMinion(self, minion_id):
         print("event:", minion_id)
         
         self.createMinionEncounter(minion_id)
         
 
-    def spawnBoss(self):
-        boss_id = self.minion_id
+    def spawnBoss(self, boss_id):
         print("event:", boss_id)
         
         self.createBossEncounter(boss_id)
@@ -39,7 +36,7 @@ class Minions:
     def give_minion_reward(self,minion_difficulty, minion_quantity):
         equipment_chance = random.uniform(0,1)
         item_chance = random.uniform(0,1)
-        exp_output = random.uniform(10,15)
+        exp_output = random.uniform(50,100)
         gold_output = random.uniform(1,5)
         gold_output = math.floor(gold_output)
         exp_output = math.floor(exp_output)
@@ -171,7 +168,8 @@ class Minions:
             
         while(True):
             print()
-            print(minions_display, end = " ")
+            for m in minions_display:
+                print (m[0], m[1])
             
             turn_not_over = True
             while(turn_not_over):
@@ -214,7 +212,8 @@ class Minions:
                             
                             for e in self.player.currently_equipped:
                                 if e[1] == 'hand':
-                                    print(e)
+                                    items = Items()
+                                    items.Equipment_Printout(e)
 
                             weapon_select = input('What weapon would the adventurer like to use?>')
                             for e in self.player.currently_equipped:
@@ -469,7 +468,7 @@ class Minions:
                                     armor[7] = float(armor[7]) - damage_to_armor
                                     if armor[7] <= 0:
                                         print('The adventurer\'s',armor[0], 'was destroyed.')
-                                        self.player.currently_equipped.remove(e)
+                                        self.player.currently_equipped.remove(armor)
                     
                         armor_absorption = armor_modifier * armor_rating * self.player.level
                         

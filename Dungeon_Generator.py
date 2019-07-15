@@ -15,7 +15,7 @@ class DungeonGenerator:
         self.size = size
         self.map = []
         #self.event = ['event_enemy_encounter', 'event_enemy_encounter', 'event_enemy_encounter', 'event_enemy_encounter_boss', 'event_shop', 'event_bonfire', 'event_bonfire', 'event_random_positive', 'event_random_positive', 'event_empty', 'event_empty']
-        self.event = ['event_bonfire']
+        self.event = ['event_enemy_encounter']
         self.has_stair_event = False
         
     def makeDungeon(self):

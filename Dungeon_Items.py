@@ -85,5 +85,15 @@ class Items:
     
         
         player.inventory.remove(item)
+    
+    def Equipment_Printout(self, equipment_array):
+        #name 0, type 1, cost 2, damage added 3, addition max health 4, additional max mana 5, armor rating 6, durability 7, additional properties 8, description 9, creation name 10
+        print(equipment_array[0], " Dmg:", equipment_array[3], " Additional Max Health:", equipment_array[4], " Additional Max Mana:", equipment_array[5], " Armor Rating:", equipment_array[6], " Durability:", equipment_array[7], " Additional Properties:", equipment_array[8], equipment_array[9])
+    
+    def Item_Printout(self, equipment_array):
+        #name, type, cost, max health increase, max mana increase, temp health increase, temp mana increase, description
+        print(equipment_array[0], " Additional Max Health:", equipment_array[3], " Additional Max Mana:", equipment_array[4], " Additional Health:", equipment_array[5], " Additional Mana:", equipment_array[6], equipment_array[7])
+        
+        
              
     

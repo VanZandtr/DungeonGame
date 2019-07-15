@@ -99,6 +99,15 @@ def level_up(player_arg):
     level = player_arg.level
 
     next_level = player_arg.level_array[level]
+    
+    #Increase Max Health and Mana
+    player_arg.max_health += 30
+    player_arg.max_mana += 10
+    
+    #Restore health and mana
+    player_arg.current_mana = player_arg.max_mana
+    player_arg.health = player_arg.max_health
+    
 
     if player_arg.exp >= next_level:
         player_arg.level = level + 1
@@ -135,7 +144,7 @@ while(need_class):
         string_command = str(command)
         print()
         if string_command in classes:
-            print('The adventurer wishes to be a', string_command,'so be it...')
+            print('The adventurer wishes to be a', string_command,'? So be it...')
             
             Skills().getSkills(player,string_command)
             
@@ -159,8 +168,6 @@ while(True):
     
     map_room = dungeon_map[current_room]
     ava_rooms = []
-    
-    print('The adventurer is in room',current_room,'.')
     
     new_Event = Event(map_room.room_type, player)
     new_Event.fetchEvent()
@@ -343,7 +350,7 @@ while(True):
             print("The adventurer has nothing equipped")
         else:
             for currently_equipped in player.currently_equipped:
-                print(currently_equipped)
+                items.Equipment_Printout(currently_equipped)
         print()
         
         print()
@@ -352,8 +359,9 @@ while(True):
             print("The adventurer has no equipment")
         
         else:
+            items = Items()
             for item in player.equipment:
-                print(item)
+                items.Equipment_Printout(item)
         print()
         
         print('Inventory: ')
@@ -362,7 +370,10 @@ while(True):
             
         else:
             for item in player.inventory:
-                print(item)
+                if item[1] == "item":
+                    items.Item_Printout(item)
+                else:
+                    items.Equipment_Printout(item)
                 
         print("----------Inventory----------")
         print()
@@ -403,7 +414,7 @@ while(True):
         print()
         print('Equipment: ')
         for item in player.equipment:
-            print(item)
+           items.Equipment_Printout(item)
         print()
         
         item_not_found = True
@@ -420,13 +431,11 @@ while(True):
                     player.equipment.remove(e);
                     player.currently_equipped.append(e.copy())
                 else:
-                    print("in else statment")
                     for currently_equipped in player.currently_equipped:
                         if break_loop_flag is True:
                             break
                         
                         if currently_equipped[1] == e[1]:
-                            print('same item found')
                             print()
                             #check if hand
                             if e[1] == 'hand':
@@ -439,7 +448,7 @@ while(True):
                                     if unequip_hand_check in ['y', 'Y', 'Yes', 'yes']:
                                         for get_hands in player.currently_equipped:
                                             if get_hands[1] == 'hand':
-                                                print(get_hands)
+                                                items.Equipment_Printout(get_hands)
                                         unequip_hand = input('Which weapon would the adventurer like to unequip?>')
                                         for current_hands_equipped in player.currently_equipped:
                                             if unequip_hand == current_hands_equipped[0]:
@@ -460,7 +469,7 @@ while(True):
                                 if unequip_hand_check in ['y', 'Y', 'Yes', 'yes']:
                                     for get_equipment in player.currently_equipped:
                                         if get_equipment[1] == e[1]:
-                                            print(get_equipment)
+                                            items.Equipment_Printout(get_equipment)
                                         unequip = input('Which ' + e[1] + ' would the adventurer like to unequip?>')
                                         for ce in player.currently_equipped:
                                             if unequip == ce[0]:
@@ -486,6 +495,7 @@ while(True):
         print()
         print("----------Skills----------")
         print('Exp:', player.exp)
+        print('Level:', player.level)
         print('Next Level up:', player.level_array[player.level])
         print('Max Mana:', player.max_mana)
         print('Mana:', player.current_mana)
@@ -496,35 +506,13 @@ while(True):
             print("The adventurer has no skills")
             
         else:
-            for skill in range(len(player.known_skills)):
-                min_damage = str(player.known_skills[skill][3])
-                max_damage = str(player.known_skills[skill][4])
-                description = player.known_skills[skill][9]
-                name = player.known_skills[skill][0]
-                level = player.known_skills[skill][1]
-                cost = player.known_skills[skill][2]
-                
-                if min_damage == max_damage:
-                    print('Skill:', name,'Level:', level,'Mana Cost:', cost, 'Damage:', min_damage, '~ ' + description)
-                
-                else:
-                    print('Skill:', name,'Level:', level,'Mana Cost:', cost, 'Damage:', min_damage + '-' + max_damage, '~ ' + description)
+            for skill in range(len(player.known_skills)):    
+                skills.Skill_Printout(player.known_skills[skill])
         
         print()
         print('Unknown Skills: ')
         for skill in range(len(player.unknown_skills)):
-            min_damage = str(player.unknown_skills[skill][3])
-            max_damage = str(player.unknown_skills[skill][4])
-            description = player.unknown_skills[skill][9]
-            name = player.unknown_skills[skill][0]
-            level = player.unknown_skills[skill][1]
-            cost = player.unknown_skills[skill][2]
-            
-            if min_damage == max_damage:
-                print('Skill:', name,'Level:', level,'Mana Cost:', cost, 'Damage:', min_damage, '~ ' + description)
-                
-            else:
-                print('Skill:', name,'Level:', level,'Mana Cost:', cost, 'Damage:', min_damage + '-' + max_damage, '~ ' + description)
+            skills.Skill_Printout(player.unknown_skills[skill])
             
         print("----------Skills----------")
         print()

@@ -93,5 +93,9 @@ class Skills:
             player.unknown_skills = self.priest_skills
         else:
             print('Error getting class')
+    
+    def Skill_Printout(self, skill):
+        #name, spell level, mana cost, damage min, damage max, damage type, spell type(AOE, Single Target, ...), enemy types effected, Special Spell text, Spell Desc
+        print(skill[0], " Level:", skill[1], " Mana Cost:", skill[2], " Min Dmg:", skill[3], " Min Dmg:", skill[4]," Dmg Type:", skill[5], " Spell Type:", skill[6], skill[8])
             
         

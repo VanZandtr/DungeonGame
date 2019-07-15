@@ -16,32 +16,17 @@ class Event:
         self.player = player
         
     def fetchEvent(self):
+        minions = Minions(self.player)
         while(True):
-            print("event:", self.event_id)
             
             if self.event_id is 'event_enemy_encounter':
-                random_minion = random.uniform(0,1)
-                
-                if random_minion < 0.5:
-                    new_minion = Minions('rat', self.player)
-                    return new_minion.spawnMinion()
-                    
-                else:
-                    new_minion = Minions('thief', self.player)
-                    new_minion.spawnMinion()
-                    
+                random_minion = random.choice(minions.minions)
+                return minions.spawnMinion(random_minion[0])
                 break
                 
             elif self.event_id is 'event_enemy_encounter_boss':
-                random_boss = random.uniform(0,1)
-                
-                if random_boss < 0.5:
-                    new_minion = Minions('big_rat')
-                    return new_minion.spawnBoss(self.player)
-                    
-                else:
-                    new_minion = Minions('theif_boss')
-                    return new_minion.spawnBoss(self.player)
+                random_boss = random.choice(minions.bosses)
+                return minions.spawnBoss(random_boss[0])
                     
                 break
                 
@@ -65,11 +50,11 @@ class Event:
                     print()
                     print('Equipment [name, type, cost, damage added, addition max health, additional max mana, mana restore, armor rating (10), durability, additional properties, description]:')
                     for e in equipment_arr:
-                        print(e)
+                        item_Class.Equipment_Printout(e)
                     print()
                     print('Items [name, type, cost, max health increase, max mana increase, temp health increase, temp mana increase, description]:')
                     for i in item_arr:
-                        print(i)
+                        item_Class.Item_Printout(i)
                     print()
                     
                     item_not_found = True
@@ -199,7 +184,12 @@ class Event:
                 
                 
             elif self.event_id is 'event_random_positive':
-                print("There is a random event here.")
+                print("There is a + random event here.")
+                print()
+                break
+            
+            elif self.event_id is 'event_random_negative':
+                print("There is a - random event here.")
                 print()
                 break
                 
