@@ -70,3 +70,11 @@ You awake to unknown dungeon guided by an unknown voice. Face monsters and hazar
 - Added a Stairs event to traverse deeper in the dungeon
 - Added a "Stuck" event if the map doesn't generate a stairs event (rare, known issue)
 - Cleaned up print out minorly (deleted some print statements)
+
+## Update (7/15/2019)
+- Added Bonfire event functionality: Rest (Recover HP, or gain temporary if HP is at max (Overheal)), Mediate (Gain Experience), Repair Equipment
+- Updated level system thresholds
+- Major Updates to print outs ---> Deletions, Rewrites, and Formatted print out methods for equipment, items, and skills
+- Buffed exp gained from minions to align with exp path updates
+- Updated Health and Mana on Level Up (+30 Hp, +10 exp) (work in progress)
+- Health and Mana is now restored on level up
