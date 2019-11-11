@@ -17,20 +17,19 @@ class Event:
         
     def fetchEvent(self):
         minions = Minions(self.player)
-        while(True):
-            
-            if self.event_id is 'event_enemy_encounter':
+        while(True):            
+            if self.event_id == 'event_enemy_encounter':
                 random_minion = random.choice(minions.minions)
                 return minions.spawnMinion(random_minion[0])
                 break
                 
-            elif self.event_id is 'event_enemy_encounter_boss':
+            elif self.event_id == 'event_enemy_encounter_boss':
                 random_boss = random.choice(minions.bosses)
                 return minions.spawnBoss(random_boss[0])
                     
                 break
                 
-            elif self.event_id is 'event_shop':
+            elif self.event_id == 'event_shop':
                 item_Class = Items()
                 print("There is a shop here.")
                 print()
@@ -102,7 +101,7 @@ class Event:
                             continue
                 break                                
                 
-            elif self.event_id is 'event_bonfire':
+            elif self.event_id == 'event_bonfire':
                 sit_flag = input("A bonfire smolders gentle before the Adventurer. Will the Adventurer rest? (Y/N)>")
                 if sit_flag in ['y','Y','Yes','yes']:
                     print('The Adventurer sits.')
@@ -176,6 +175,7 @@ class Event:
                         else:
                             print("The adventurer cannot do that.")
                             continue
+                    self.event_id = 'burned_bonfire'
                     print()   
                     break
                 else:
@@ -183,31 +183,31 @@ class Event:
                     break
                 
                 
-            elif self.event_id is 'event_random_positive':
+            elif self.event_id == 'event_random_positive':
                 print("There is a + random event here.")
                 print()
                 break
             
-            elif self.event_id is 'event_random_negative':
+            elif self.event_id == 'event_random_negative':
                 print("There is a - random event here.")
                 print()
                 break
                 
-            elif self.event_id is 'event_empty':
+            elif self.event_id == 'event_empty':
                 print("There is nothing here.")
                 print()
                 break
             
-            elif self.event_id is 'dead_enemies':
+            elif self.event_id == 'dead_enemies':
                 print('The adventurers past battle lies before them.')
                 print()
                 break
             
-            elif self.event_id is 'empty_shop':
+            elif self.event_id == 'empty_shop':
                 print('An empty stall lies before the adventurer. It seems the shop has left.')
                 print()
                 break
-            elif self.event_id is 'event_stairs':
+            elif self.event_id == 'event_stairs':
                 print()
                 print('Before the Adventurer is a set of stairs descending into darkness.')
                 command = input('Will the Adventurer take the descent? (Y/N)>')
@@ -220,7 +220,7 @@ class Event:
                     print()
                     print("The Adventurer decides to return later.")
                     break
-            elif self.event_id is 'burned_bonfire':
+            elif self.event_id == 'burned_bonfire':
                 print('Ash lays where a fire once burned.')
                 print()
                 break

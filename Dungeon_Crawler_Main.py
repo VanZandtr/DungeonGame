@@ -5,40 +5,22 @@ from Dungeon_Skills import Skills
 from Dungeon_Items import Items
 import numpy as np
 import math as math
+import pickle as pickle
+from os import path
 
 
 mapsize = 10
-new_Dungeon = DungeonGenerator(mapsize)
-new_Dungeon.makeDungeon()
-dungeon_map = new_Dungeon.map
-
-'''
-print("----------final----------")
-for room in dungeon_map:
-    print("id",room.room_id)
-    print("type",room.room_type)
-    #print("north",room.north)
-    #print("south",room.south)
-    #print("east",room.east)
-    #print("west",room.west)
-    print()
-    print()
-print("----------final----------")
-'''    
-
+dungeon_map = {}
 previous_room = 0
 current_room = 0
-
 need_class = True
 max_level_alerted = False
 classes = ['Wizard','Priest']
 map_markers = ['0', 'x', '^']
-
 player = Player()
 skills = Skills()
-
 test = True
-
+    
 #test items
 if test is True:
     items = Items()
@@ -47,22 +29,61 @@ if test is True:
     player.currently_equipped.append(items.rusty_sword.copy())
     player.currently_equipped.append(items.rusty_helm.copy())
     player.equipment.append(items.rusty_chest.copy())
-    player.equipment[0][7] -= 5
 
 bounds = 11
 matrix = np.chararray((bounds,bounds), unicode=True)
 y_coor = math.floor(bounds/2)
 x_coor = math.floor(bounds/2)
     
-def gen_screen_map():
+def gen_new_map():
     matrix[:]='.'
     matrix[x_coor,y_coor] = '1'
+    
+def save_game():
+    arr = {key:value for key, value in player.__dict__.items() if not key.startswith('__') and not callable(key)}
+    player_data = {}
+    for key in arr:
+        player_data[key] = getattr(player, key)
+        
+        
+    #save
+    with open("save_file.txt", "ab") as save_file:
+        #clear file
+        save_file.seek(0)
+        save_file.truncate()
+        #player data
+        pickle.dump(player_data, save_file)
+    save_file.close
+        
+    #gamestate
+    matrix.dump("my_matrix.dat")
+    
+    with open("saved_dungeon_state.dat", "wb") as fp:
+        #clear file
+        fp.seek(0)
+        fp.truncate()
+        pickle.dump(dungeon_map, fp)
+    fp.close()
 
+def load_game():
+    load_file = open('save_file.txt', 'rb')      
+    #load player data
+    dir_content = pickle.load(load_file)
+    for key in dir_content:
+        print(key,"=>", dir_content[key])
+        setattr(player, key, dir_content[key])
+    load_file.close()
+    
+    #load matrix data
+    matrix = np.load("my_matrix.dat")
+    
+    #load map
+    with open("saved_dungeon_state.dat", "rb") as fp:   # Unpickling
+        dungeon_map = pickle.load(fp)
+    fp.close()
 
-gen_screen_map()
-
-
-
+    return matrix, dungeon_map
+    
 def reset_map():
     for i in range(bounds):
         for j in range(bounds):
@@ -75,9 +96,7 @@ def update_screen_map():
             if matrix[i,j] not in ['x','0']:
                 matrix[i,j]='.'
     matrix[x_coor,y_coor] = '1'
-
         
-
 def hint():
     print()
     print("----------Hint----------")
@@ -91,6 +110,7 @@ def hint():
     print('Equip:','e, E, equip, Equip')
     print('Unequip:','u, U, unequip, Unequip')
     print('Stuck?:','stuck', 'Stuck', "DELETE THIS AFTER MAP IS FIXED")
+    print('Save Game:', 'SAV', 'sav', 'Sav')
     print('Hint:','display this message')
     print("----------Hint----------")
     print()
@@ -133,9 +153,25 @@ def level_up(player_arg):
         for remove in skills_to_remove:        
             player_arg.unknown_skills.remove(remove)
             
-        
-hint()
 
+
+''' GAME LOOP STARTS HERE'''
+#check if file exists
+if path.exists("save_file.txt") is True:
+    print(type(dungeon_map))
+    load_opt = input('Would the adventurer like to use a saved game?>')
+    if load_opt in ['y','Y','yes','Yes','YES']:
+        matrix, dungeon_map = load_game()
+        #set current room
+        #find where i is in dugneon map
+        #current room == dungeon[i].room_number
+        need_class = False
+    else:
+        new_Dungeon = DungeonGenerator(mapsize)
+        new_Dungeon.makeDungeon()
+        dungeon_map = new_Dungeon.map
+        gen_new_map()
+        
 while(need_class):
         print('What will the adventurer be this time?>')
         for character_class in classes:
@@ -152,8 +188,9 @@ while(need_class):
         else:
             print('The adventurer may not venture this path. Choose another.')
             need_class = True
-        
-        
+            
+
+hint()
 while(True):
     map_marker = '0'
     
@@ -171,6 +208,8 @@ while(True):
     
     new_Event = Event(map_room.room_type, player)
     new_Event.fetchEvent()
+    
+    
     
     if player.is_dead is True:
         print("The adventurer has died")
@@ -201,7 +240,7 @@ while(True):
         #shop leaves
         map_room.room_type = 'empty_shop'
         
-    elif map_room.room_type is 'event_bonfire' and player.burn_bonfire == True:
+    elif (map_room.room_type is 'event_bonfire' and player.burn_bonfire == True) or (map_room.room_type is 'event_bonfire' and map_marker == '0'):
         #shop leaves
         map_room.room_type = 'burned_bonfire'
         player.burn_bonfire == False
@@ -226,7 +265,7 @@ while(True):
         y_coor = math.floor(bounds/2)
         x_coor = math.floor(bounds/2)
       
-        gen_screen_map()
+        gen_new_map()
     
         continue
         
@@ -251,7 +290,7 @@ while(True):
         if matrix[x_coor, y_coor - 1] not in map_markers:
             matrix[x_coor, y_coor - 1] = '*'
             
-        
+    #print map to screen
     for i in range(bounds):
         for j in range(bounds):
             print(matrix[i,j],end='  ')
@@ -265,7 +304,7 @@ while(True):
     
     if command in ['q','Q','exit','Exit','Quit','quit']:
         print()
-        quit_command = input('The adventurer will lose everything. Is the adventurer sure?>' )
+        quit_command = input('The adventurer will lose everything that is not saved. Is the adventurer sure?>' )
         if quit_command in ['y','Y','yes','Yes']:
             print("Goodbye friend, may he follow...")
             break
@@ -523,6 +562,10 @@ while(True):
         print("HAVE THIS CHECK IF NO ROOM HAD THE STAIRS EVENT FIRST!")
         map_room.room_type = 'event_stairs'
         player.descend = True
+        
+    elif command in ['SAV', 'sav', 'Sav']:
+        print("The adventurer has saved his progression")
+        save_game()
         
     else:
         print()

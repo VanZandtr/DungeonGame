@@ -5,6 +5,9 @@ Created on Sun Apr  7 19:30:32 2019
 @author: Raymond
 """
 
+"""
+Make sure to add new skills to load/save atm
+"""
 class Player:
     def __init__(self):
         self.level = 0
