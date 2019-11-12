@@ -9,7 +9,7 @@ You awake to unknown dungeon guided by an unknown voice. Face monsters and hazar
 - Health & Spell System (Specific to Class)
 - Item, Equipment, Misc. Inventories
 - Combat System
-- Permadeath
+- Permadeath (Needs to be updated with new save system)
 - Movement System (Nostalgic of Zork)
 - Shops
 - Room Remembering (i.e. enemies stay dead, shop can't be visited twice)
@@ -62,6 +62,8 @@ You awake to unknown dungeon guided by an unknown voice. Face monsters and hazar
 - Change Dungeon_Minions.py, Dungeon_Skills.py, and Dungeon_Items.py into Tables (ie Database).(Added May 2019) 
 - <s>Make items/equipment usable in combat           (Added June 2019)</s> (Completed 7/2/2019)
 - Add Exit (Added 7/3/2019)
+- Update Permadeath (i.e. just delete the files) (Added 11/12/2019)
+- Add security to save files to prevent cheating (Added 11/12/2019)
 
 ## Update (7/2/2019)
 - Added Armor and Weapon Durablitity
