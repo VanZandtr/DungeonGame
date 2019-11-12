@@ -17,6 +17,7 @@ You awake to unknown dungeon guided by an unknown voice. Face monsters and hazar
 - Multiple Enemy types
 - Multiple Floors
 - Real Time Map
+- Game Saving
 
 ## How to Play
 1.) Download files  
@@ -44,6 +45,12 @@ You awake to unknown dungeon guided by an unknown voice. Face monsters and hazar
    * Player Object
 - Dungeon_Skills.py 
    * Holds all skills and class options.
+- my_matrix.dat
+   * Holds save info for map
+- saved_dungeon_state.dat
+   * Holds save info for dungeon layout and gamestate
+- save_file.txt
+   * Holds save info for player stats/equipment/skills
 
 ## Future Work
 - <s>Multiple floors           (Added May 2019)</s> (Completed 7/3/2019)
@@ -78,3 +85,6 @@ You awake to unknown dungeon guided by an unknown voice. Face monsters and hazar
 - Buffed exp gained from minions to align with exp path updates
 - Updated Health and Mana on Level Up (+30 Hp, +10 exp) (work in progress)
 - Health and Mana is now restored on level up
+
+## Update (11/12/2019)
+- Straying away from traditional rogue-lites I have added a save feature that restores player states as well as dungeon state which mirrors the map layout
