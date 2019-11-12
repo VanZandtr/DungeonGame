@@ -1,4 +1,4 @@
-# Another Rogue-Lite Dungeon Crawler
+# Another <s>Rogue-Lite</s> Dungeon Crawler
 A game created and tested by Raymond Van Zandt.
 
 ## Introduction
