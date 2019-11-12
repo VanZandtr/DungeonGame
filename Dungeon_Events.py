@@ -179,6 +179,8 @@ class Event:
                     print()   
                     break
                 else:
+                    self.event_id = 'event_bonfire'
+                    self.player.burn_bonfire = False
                     print("The adventurer decides to return later.")
                     break
                 

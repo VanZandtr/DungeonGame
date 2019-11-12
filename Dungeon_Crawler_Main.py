@@ -22,7 +22,7 @@ skills = Skills()
 test = True
     
 #test items
-if test is True:
+if test == True:
     items = Items()
     player.inventory.append(items.test_potion.copy())
     player.currently_equipped.append(items.rusty_sword.copy())
@@ -63,6 +63,10 @@ def save_game():
         fp.seek(0)
         fp.truncate()
         pickle.dump(dungeon_map, fp)
+        pickle.dump(current_room, fp)
+        pickle.dump(previous_room, fp)
+        pickle.dump(x_coor, fp)
+        pickle.dump(y_coor, fp)
     fp.close()
 
 def load_game():
@@ -70,7 +74,6 @@ def load_game():
     #load player data
     dir_content = pickle.load(load_file)
     for key in dir_content:
-        print(key,"=>", dir_content[key])
         setattr(player, key, dir_content[key])
     load_file.close()
     
@@ -78,11 +81,15 @@ def load_game():
     matrix = np.load("my_matrix.dat")
     
     #load map
-    with open("saved_dungeon_state.dat", "rb") as fp:   # Unpickling
+    with open("saved_dungeon_state.dat", "rb") as fp:
         dungeon_map = pickle.load(fp)
+        current_room = pickle.load(fp)
+        previous_room = pickle.load(fp)
+        x_coor = pickle.load(fp)
+        y_coor = pickle.load(fp)
     fp.close()
 
-    return matrix, dungeon_map
+    return matrix, dungeon_map, current_room, previous_room, x_coor, y_coor
     
 def reset_map():
     for i in range(bounds):
@@ -93,7 +100,7 @@ def reset_map():
 def update_screen_map():
     for i in range(bounds):
         for j in range(bounds):
-            if matrix[i,j] not in ['x','0']:
+            if matrix[i,j] not in map_markers:
                 matrix[i,j]='.'
     matrix[x_coor,y_coor] = '1'
         
@@ -132,7 +139,7 @@ def level_up(player_arg):
     if player_arg.exp >= next_level:
         player_arg.level = level + 1
         
-        if player_arg.level is not 1:
+        if player_arg.level != 1:
             print()
             print('The adventure has leveled up:', 'Level:', player_arg.level)
             print()
@@ -141,7 +148,7 @@ def level_up(player_arg):
         skills_to_remove = []
 
         for skill in range(len(player_arg.unknown_skills)):
-            if player_arg.unknown_skills[skill][1] is player_arg.level:
+            if player_arg.unknown_skills[skill][1] == player_arg.level:
                 print()
                 print('The adventurer has learned', player_arg.unknown_skills[skill][0])
                 print()
@@ -157,20 +164,24 @@ def level_up(player_arg):
 
 ''' GAME LOOP STARTS HERE'''
 #check if file exists
-if path.exists("save_file.txt") is True:
-    print(type(dungeon_map))
+if path.exists("save_file.txt") == True:
     load_opt = input('Would the adventurer like to use a saved game?>')
     if load_opt in ['y','Y','yes','Yes','YES']:
-        matrix, dungeon_map = load_game()
-        #set current room
-        #find where i is in dugneon map
-        #current room == dungeon[i].room_number
+        matrix, dungeon_map, current_room, previous_room, x_coor, y_coor = load_game()
         need_class = False
+        hint()
+        #print map to screen
+        for i in range(bounds):
+            for j in range(bounds):
+                print(matrix[i,j],end='  ')
+            print('\n')
+    
     else:
         new_Dungeon = DungeonGenerator(mapsize)
         new_Dungeon.makeDungeon()
         dungeon_map = new_Dungeon.map
         gen_new_map()
+        hint()
         
 while(need_class):
         print('What will the adventurer be this time?>')
@@ -189,20 +200,17 @@ while(need_class):
             print('The adventurer may not venture this path. Choose another.')
             need_class = True
             
-
-hint()
 while(True):
     map_marker = '0'
     
     if player.level >= len(player.level_array):
-        if (max_level_alerted is False):
+        if (max_level_alerted == False):
             print('The adventurer has reached his true potential')
             max_level_alerted = True
     else:
         #check if character should level up
         level_up(player)
-    
-    
+
     map_room = dungeon_map[current_room]
     ava_rooms = []
     
@@ -211,15 +219,15 @@ while(True):
     
     
     
-    if player.is_dead is True:
+    if player.is_dead == True:
         print("The adventurer has died")
         break
     
-    if map_room.room_type is ('event_enemy_encounter' or 'event_enemy_encounter_boss') and player.ran_away is False:
+    if map_room.room_type == ('event_enemy_encounter' or 'event_enemy_encounter_boss') and player.ran_away == False:
         #if we get here we know the player has won the encounter
         map_room.room_type = 'dead_enemies'
         
-    elif map_room.room_type is ('event_enemy_encounter' or 'event_enemy_encounter_boss') and player.ran_away is True:
+    elif map_room.room_type == ('event_enemy_encounter' or 'event_enemy_encounter_boss') and player.ran_away == True:
         print('The adventurer flees to the previous room', previous_room)
         player.ran_away = False
         if map_room.north == previous_room:
@@ -236,22 +244,22 @@ while(True):
         current_room = previous_room
         continue
     
-    elif map_room.room_type is 'event_shop':
+    elif map_room.room_type == 'event_shop':
         #shop leaves
         map_room.room_type = 'empty_shop'
         
-    elif (map_room.room_type is 'event_bonfire' and player.burn_bonfire == True) or (map_room.room_type is 'event_bonfire' and map_marker == '0'):
-        #shop leaves
+    elif (map_room.room_type == 'event_bonfire' and player.burn_bonfire == True):
         map_room.room_type = 'burned_bonfire'
-        player.burn_bonfire == False
+        player.burn_bonfire = False
     
-    elif map_room.room_type is 'event_bonfire' and player.burn_bonfire == False:
+    elif map_room.room_type == 'event_bonfire' and player.burn_bonfire == False:
+        print("HERE")
         map_marker = '^'
         
-    elif map_room.room_type is 'event_stairs' and player.descend is False:
+    elif map_room.room_type == 'event_stairs' and player.descend == False:
         map_marker = 'x'
 
-    elif map_room.room_type is 'event_stairs' and player.descend is True:
+    elif map_room.room_type == 'event_stairs' and player.descend == True:
         player.descend = False
 
         previous_room = 0
@@ -270,22 +278,22 @@ while(True):
         continue
         
     
-    if map_room.north is not -1:
+    if map_room.north != -1:
         ava_rooms.append("North")
         if matrix[x_coor - 1, y_coor] not in map_markers:
             matrix[x_coor - 1, y_coor] = '*'
             
-    if map_room.south is not -1:
+    if map_room.south != -1:
         ava_rooms.append("South")
         if matrix[x_coor + 1, y_coor] not in map_markers:
             matrix[x_coor +1, y_coor] = '*'
             
-    if map_room.east is not -1:
+    if map_room.east != -1:
         ava_rooms.append("East")
         if matrix[x_coor, y_coor + 1] not in map_markers:
             matrix[x_coor, y_coor + 1] = '*'
             
-    if map_room.west is not -1:
+    if map_room.west != -1:
         ava_rooms.append("West")
         if matrix[x_coor, y_coor - 1] not in map_markers:
             matrix[x_coor, y_coor - 1] = '*'
@@ -313,7 +321,7 @@ while(True):
     
     elif command in ['north', 'North', 'move North', 'Move North', 'move north', 'Move north']:
         print()
-        if map_room.north is not -1:
+        if map_room.north != -1:
             print("The adventurer moves north.")
             matrix[x_coor, y_coor] = map_marker
             x_coor-=1
@@ -321,6 +329,7 @@ while(True):
             reset_map()
             previous_room = current_room
             current_room = map_room.north
+            print("N", current_room)
             print()
         else:
             print("The adventurer may not move this way.")
@@ -329,7 +338,7 @@ while(True):
         
     elif command in ['south', 'South', 'move South', 'Move South', 'move south', 'Move south']:
         print()
-        if map_room.south is not -1:
+        if map_room.south != -1:
             print("The adventurer moves south.")
             matrix[x_coor, y_coor] = map_marker
             x_coor+=1
@@ -337,6 +346,7 @@ while(True):
             reset_map()
             previous_room = current_room
             current_room = map_room.south
+            print("S", current_room)
             print()
         else:
             print("The adventurer may not move this way.")
@@ -345,7 +355,7 @@ while(True):
         
     elif command in ['east', 'East', 'move East', 'Move East', 'move east', 'Move east']:
         print()
-        if map_room.east is not -1:
+        if map_room.east != -1:
             print("The adventurer moves east.")
             matrix[x_coor, y_coor] = map_marker
             y_coor+=1
@@ -353,6 +363,7 @@ while(True):
             reset_map()
             previous_room = current_room
             current_room = map_room.east
+            print("E", current_room)
             print()
         else:
             print("The adventurer may not move this way.")
@@ -361,7 +372,7 @@ while(True):
         
     elif command in ['west', 'West', 'move West', 'Move West', 'move west', 'Move west']:
         print()
-        if map_room.west is not -1:
+        if map_room.west != -1:
             print("The adventurer moves west.")
             matrix[x_coor, y_coor] = map_marker
             y_coor-=1
@@ -369,6 +380,7 @@ while(True):
             reset_map()
             previous_room = current_room
             current_room = map_room.west
+            print("W", current_room)
             print()
         else:
             print("The adventurer may not move this way.")
@@ -385,7 +397,7 @@ while(True):
         
         print()
         print('Currently Equipped: ')
-        if len(player.currently_equipped) is 0:
+        if len(player.currently_equipped) == 0:
             print("The adventurer has nothing equipped")
         else:
             for currently_equipped in player.currently_equipped:
@@ -394,7 +406,7 @@ while(True):
         
         print()
         print('Equipment: ')
-        if len(player.equipment) is 0:
+        if len(player.equipment) == 0:
             print("The adventurer has no equipment")
         
         else:
@@ -404,7 +416,7 @@ while(True):
         print()
         
         print('Inventory: ')
-        if len(player.inventory) is 0:
+        if len(player.inventory) == 0:
             print("The adventurer has nothing")
             
         else:
@@ -419,7 +431,7 @@ while(True):
     
     elif command in ['U','u','unequip', 'Unequip']:
         print()
-        if len(player.currently_equipped) is 0:
+        if len(player.currently_equipped) == 0:
             print("The adventurer has nothing equipped")
             
         else:
@@ -438,13 +450,13 @@ while(True):
                     print("The adventurer unequips their ", unequip)
                     item_found = True
                     break
-            if item_found is False:
+            if item_found == False:
                     print("The adventurer doesn't have that")
 
         print()            
         
     elif command in ['E','e','equip', 'Equip']:
-        if len(player.equipment) is 0:
+        if len(player.equipment) == 0:
             print()
             print("The adventurer has nothing equip")
             print()
@@ -466,12 +478,12 @@ while(True):
                 print('item found')
                 print()
                                 
-                if len(player.currently_equipped) is 0:
+                if len(player.currently_equipped) == 0:
                     player.equipment.remove(e);
                     player.currently_equipped.append(e.copy())
                 else:
                     for currently_equipped in player.currently_equipped:
-                        if break_loop_flag is True:
+                        if break_loop_flag == True:
                             break
                         
                         if currently_equipped[1] == e[1]:
@@ -541,7 +553,7 @@ while(True):
         print()
         
         print('Skills: ')
-        if len(player.known_skills) is 0:
+        if len(player.known_skills) == 0:
             print("The adventurer has no skills")
             
         else:
