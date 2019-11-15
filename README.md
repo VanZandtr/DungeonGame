@@ -1,4 +1,4 @@
-# Another Rogue-Lite Dungeon Crawler
+# Another <s>Rogue-Lite</s> Dungeon Crawler
 A game created and tested by Raymond Van Zandt.
 
 ## Introduction
@@ -9,7 +9,7 @@ You awake to unknown dungeon guided by an unknown voice. Face monsters and hazar
 - Health & Spell System (Specific to Class)
 - Item, Equipment, Misc. Inventories
 - Combat System
-- Permadeath
+- Permadeath (Needs to be updated with new save system)
 - Movement System (Nostalgic of Zork)
 - Shops
 - Room Remembering (i.e. enemies stay dead, shop can't be visited twice)
@@ -17,6 +17,7 @@ You awake to unknown dungeon guided by an unknown voice. Face monsters and hazar
 - Multiple Enemy types
 - Multiple Floors
 - Real Time Map
+- Game Saving
 
 ## How to Play
 1.) Download files  
@@ -44,6 +45,12 @@ You awake to unknown dungeon guided by an unknown voice. Face monsters and hazar
    * Player Object
 - Dungeon_Skills.py 
    * Holds all skills and class options.
+- my_matrix.dat
+   * Holds save info for map
+- saved_dungeon_state.dat
+   * Holds save info for dungeon layout and gamestate
+- save_file.txt
+   * Holds save info for player stats/equipment/skills
 
 ## Future Work
 - <s>Multiple floors           (Added May 2019)</s> (Completed 7/3/2019)
@@ -55,6 +62,8 @@ You awake to unknown dungeon guided by an unknown voice. Face monsters and hazar
 - Change Dungeon_Minions.py, Dungeon_Skills.py, and Dungeon_Items.py into Tables (ie Database).(Added May 2019) 
 - <s>Make items/equipment usable in combat           (Added June 2019)</s> (Completed 7/2/2019)
 - Add Exit (Added 7/3/2019)
+- Update Permadeath (i.e. just delete the files) (Added 11/12/2019)
+- Add security to save files to prevent cheating (Added 11/12/2019)
 
 ## Update (7/2/2019)
 - Added Armor and Weapon Durablitity
@@ -78,3 +87,6 @@ You awake to unknown dungeon guided by an unknown voice. Face monsters and hazar
 - Buffed exp gained from minions to align with exp path updates
 - Updated Health and Mana on Level Up (+30 Hp, +10 exp) (work in progress)
 - Health and Mana is now restored on level up
+
+## Update (11/12/2019)
+- Straying away from traditional rogue-lites I have added a save feature that restores player states as well as dungeon state which mirrors the map layout
