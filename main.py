@@ -1,8 +1,9 @@
 import math
 import random
 import pygame
-from Dungeon_Main import Dungeon_Main
+import Dungeon_Main
 from pygame import mixer
+from pygame.locals import *
 import os
 import sys
 
@@ -75,47 +76,49 @@ def button(msg,x,y,w,h,ic,ac, action=None):
 def get_key():
     while 1:
         event = pygame.event.poll()
-        if event.type == KEYDOWN:
+        if event.type == pygame.KEYDOWN:
             return event.key
         else:
             pass
-
-def display_box(screen, message):
-    "Print a message in a box in the middle of the screen"
+    
+def make_display_box(screen, message, left, top, width, height, background_color, outline_color, message_color):
     fontobject = pygame.font.Font(None, 18)
-    pygame.draw.rect(screen, (0, 0, 0),
-                     ((screen.get_width() / 2) - 100,
-                      (screen.get_height() / 2) - 10,
-                      200, 20), 0)
-    pygame.draw.rect(screen, (255, 255, 255),
-                     ((screen.get_width() / 2) - 102,
-                      (screen.get_height() / 2) - 12,
-                      204, 24), 1)
+    
+    #Background
+    pygame.draw.rect(screen, background_color, [left, top, width, height], 0)
+    #Outline
+    pygame.draw.rect(screen, outline_color, [left - 2, top - 2, width + 4, height + 4], 1)
     if len(message) != 0:
-        screen.blit(fontobject.render(message, 1, (255, 255, 255)),
-                    ((screen.get_width() / 2) - 100, (screen.get_height() / 2) - 10))
+        i = 0
+        for lines in message.splitlines():
+            screen.blit(fontobject.render(lines, 1, message_color), [left, top + (i*12)])
+            i+=1
     pygame.display.flip()
+        
+    
 
 def ask(screen, question):
     "ask(screen, question) -> answer"
     pygame.font.init()
     current_string = []
-    display_box(screen, question + ": " + "".join(current_string))
+    
+    make_display_box(screen, (question + ": " + "".join(current_string)), 
+                     ((screen.get_width() / 2) - display_width/4), 10, 400, 40, 
+                     black, red, white)
+    
     while 1:
         inkey = get_key()
-        if inkey == K_BACKSPACE:
+        if inkey == pygame.K_BACKSPACE:
             current_string = current_string[0:-1]
-        elif inkey == K_RETURN:
-            file = open(bad_words_file, 'r').readlines()
-            if "".join(current_string) in [thing[:-1] for thing in file]:
-                current_string = []
-            else:
+        elif inkey == pygame.K_RETURN:
                 break
-        elif inkey == K_MINUS:
+        elif inkey == pygame.K_MINUS:
             current_string.append("_")
         elif inkey <= 127:
             current_string.append(chr(inkey))
-        display_box(screen, question + ": " + "".join(current_string))
+        make_display_box(screen, (question + ": " + "".join(current_string)), 
+                     ((screen.get_width() / 2) - display_width/4), 10, 400, 40, 
+                     black, red, white)
     return "".join(current_string)
 
 def game_intro():
@@ -135,7 +138,7 @@ def game_intro():
         gameDisplay.blit(TextSurf, TextRect)
         
         button("Start", 150, 450, 100 , 50, green, bright_green, game_loop)
-        button("Quit", 550, 450, 100 , 50, red, bright_red, load_game)
+        button("Quit", 550, 450, 100 , 50, red, bright_red, quit_game)
 
         pygame.display.update()
         clock.tick(15)
@@ -143,22 +146,33 @@ def game_intro():
 def game_loop():
     #clear screen
     gameDisplay.fill(white)
-    medium_Text = pygame.font.Font('freesansbold.ttf',50)
-    TextSurf, TextRect = text_objects("Dungeon Game", medium_Text)
-    TextRect.center = ((display_width/2),(display_height/2))
-    gameDisplay.blit(TextSurf, TextRect)
+    
+    
+    #longer history of text if wanted
+    history = []
+    
+    ret = Dungeon_Main.hint()
+    make_display_box(gameDisplay, ret, ((display_width/ 2) - 250), 
+                     350, 500, 200, black, red, white)
     
     while True:
-        print(ask(gameDisplay, "Name") + " was entered")
+        command = ask(gameDisplay, "What would you like to do? ")        
+        quit_flag, ret = Dungeon_Main.main_loop(command)
+    
+        history.append(ret)
+        history.append('\n')
         
-        command = input("Give Command")
-        quit_flag = Dungeon_Main.main_loop(command)
-        if quit_flag == False:
+        make_display_box(gameDisplay, ret, ((display_width/ 2) - 250), 
+                     350, 500, 200, black, red, white)
+        
+        if quit_flag == True:
             break
     
 def load_game():
     print("load_game to be implmented")
-        
+    
+def quit_game():
+    pygame.quit()        
 ###############################################################################
 game_intro()
 pygame.quit()
