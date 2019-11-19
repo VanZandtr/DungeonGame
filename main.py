@@ -4,8 +4,26 @@ import pygame
 import Dungeon_Main
 from pygame import mixer
 from pygame.locals import *
-import os
+from os import path
 import sys
+import numpy as np
+
+
+#Dungeon Vars
+mapsize = 10
+dungeon_map = {}
+previous_room = 0
+current_room = 0
+need_class = True
+max_level_alerted = False
+classes = ['Wizard','Priest']
+map_markers = ['0', 'x', '^']
+test = True
+bounds = 11
+matrix = np.chararray((bounds,bounds), unicode=True)
+y_coor = math.floor(bounds/2)
+x_coor = math.floor(bounds/2)
+
 
 # Intialize the pygame
 pygame.init()
@@ -45,6 +63,8 @@ block_color = (53, 115, 255)
 
 #clock
 clock = pygame.time.Clock()
+
+load_save = False
 
 def text_objects(text, font):
     textSurface = font.render(text, True, black)
@@ -137,13 +157,13 @@ def game_intro():
         TextRect.center = ((display_width/2),(display_height/2))
         gameDisplay.blit(TextSurf, TextRect)
         
-        button("Start", 150, 450, 100 , 50, green, bright_green, game_loop)
+        button("Start", 150, 450, 100 , 50, green, bright_green, game_loop(False))
         button("Quit", 550, 450, 100 , 50, red, bright_red, quit_game)
 
         pygame.display.update()
         clock.tick(15)
         
-def game_loop():
+def game_loop(game_loaded_flag):
     #clear screen
     gameDisplay.fill(white)
     
@@ -154,6 +174,10 @@ def game_loop():
     ret = Dungeon_Main.hint()
     make_display_box(gameDisplay, ret, ((display_width/ 2) - 250), 
                      350, 500, 200, black, red, white)
+    
+    #check if new game
+    if game_loaded_flag != True:
+        dungeon_map = Dungeon_Main.get_gamesave(False)  
     
     while True:
         command = ask(gameDisplay, "What would you like to do? ")        
@@ -169,7 +193,19 @@ def game_loop():
             break
     
 def load_game():
-    print("load_game to be implmented")
+    #check if file exists
+    if path.exists("save_file.txt") == True:
+        msg = "Save File Found"
+        Dungeon_Main.get_gamesave(True)
+        ret = True
+        
+    else:
+        msg = "no save found"
+        ret = False
+        
+    #DO A popup here w/msg
+    game_loop(ret)
+    
     
 def quit_game():
     pygame.quit()        

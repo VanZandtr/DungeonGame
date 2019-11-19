@@ -13,38 +13,45 @@ import numpy as np
 import math as math
 import pickle as pickle
 from os import path
-
-mapsize = 10
-dungeon_map = {}
-previous_room = 0
-current_room = 0
-need_class = True
-max_level_alerted = False
-classes = ['Wizard','Priest']
-map_markers = ['0', 'x', '^']
 player = Player()
 skills = Skills()
-test = True
-    
-#test items
-if test == True:
-    items = Items()
-    player.inventory.append(items.test_potion.copy())
-    player.currently_equipped.append(items.rusty_sword.copy())
-    player.currently_equipped.append(items.rusty_sword.copy())
-    player.currently_equipped.append(items.rusty_helm.copy())
-    player.equipment.append(items.rusty_chest.copy())
 
-bounds = 11
-matrix = np.chararray((bounds,bounds), unicode=True)
-y_coor = math.floor(bounds/2)
-x_coor = math.floor(bounds/2)
+def hint():
+    res = "----------Hint----------"
+    res += '\n'
+    res +='Quit: q, Q, exit, Exit, quit, Quit'
+    res += '\n'
+    res +='Move North: north, North, move North, Move North, move north, Move north'
+    res += '\n'
+    res +='Move South: south, South, move South, Move South, move south, Move south'
+    res += '\n'
+    res +='Move East: east, East, move East, Move East, move east, Move east'
+    res += '\n'
+    res +='Move West: west, West, move West, Move West, move west, Move west'
+    res += '\n'
+    res +='Inventory: i, I, Inventory, inventory'
+    res += '\n'
+    res +='Skills: s, S, skills, Skills'
+    res += '\n'
+    res +='Equip: e, E, equip, Equip'
+    res += '\n'
+    res +='Unequip: u, U, unequip, Unequip'
+    res += '\n'
+    res +='Stuck?: stuck, Stuck, DELETE THIS AFTER MAP IS FIXED'
+    res += '\n'
+    res +='Save Game: SAV, sav, Sav'
+    res += '\n'
+    res +='Hint:display this message'
+    res += '\n'
+    res +="----------Hint----------"
+    res += '\n'
+    return res
     
-def gen_new_map():
+def gen_new_map(matrix, x_coor, y_coor):
     matrix[:]='.'
     matrix[x_coor,y_coor] = '1'
     
-def save_game():
+def save_game(matrix, dungeon_map, current_room, previous_room, x_coor, y_coor):
     arr = {key:value for key, value in player.__dict__.items() if not key.startswith('__') and not callable(key)}
     player_data = {}
     for key in arr:
@@ -96,49 +103,18 @@ def load_game():
 
     return matrix, dungeon_map, current_room, previous_room, x_coor, y_coor
     
-def reset_map():
+def reset_map(matrix, bounds):
     for i in range(bounds):
         for j in range(bounds):
             if matrix[i,j] == '*':
                 matrix[i,j] = '.'
 
-def update_screen_map():
+def update_screen_map(matrix, bounds, x_coor, y_coor, map_markers):
     for i in range(bounds):
         for j in range(bounds):
             if matrix[i,j] not in map_markers:
                 matrix[i,j]='.'
     matrix[x_coor,y_coor] = '1'
-        
-def hint():
-    res = "----------Hint----------"
-    res += '\n'
-    res +='Quit: q, Q, exit, Exit, quit, Quit'
-    res += '\n'
-    res +='Move North: north, North, move North, Move North, move north, Move north'
-    res += '\n'
-    res +='Move South: south, South, move South, Move South, move south, Move south'
-    res += '\n'
-    res +='Move East: east, East, move East, Move East, move east, Move east'
-    res += '\n'
-    res +='Move West: west, West, move West, Move West, move west, Move west'
-    res += '\n'
-    res +='Inventory: i, I, Inventory, inventory'
-    res += '\n'
-    res +='Skills: s, S, skills, Skills'
-    res += '\n'
-    res +='Equip: e, E, equip, Equip'
-    res += '\n'
-    res +='Unequip: u, U, unequip, Unequip'
-    res += '\n'
-    res +='Stuck?: stuck, Stuck, DELETE THIS AFTER MAP IS FIXED'
-    res += '\n'
-    res +='Save Game: SAV, sav, Sav'
-    res += '\n'
-    res +='Hint:display this message'
-    res += '\n'
-    res +="----------Hint----------"
-    res += '\n'
-    return res
     
 def level_up(player_arg):
     level = player_arg.level
@@ -158,18 +134,19 @@ def level_up(player_arg):
         player_arg.level = level + 1
         
         if player_arg.level != 1:
-            print()
-            print('The adventure has leveled up:', 'Level:', player_arg.level)
-            print()
+            res = '\n'
+            res += 'The adventure has leveled up! Level:' + player_arg.level
+            res += '\n'
             #give random loot?
 
         skills_to_remove = []
 
         for skill in range(len(player_arg.unknown_skills)):
             if player_arg.unknown_skills[skill][1] == player_arg.level:
-                print()
-                print('The adventurer has learned', player_arg.unknown_skills[skill][0])
-                print()
+                res += '\n'
+                res += 'The adventurer has learned' + player_arg.unknown_skills[skill][0]
+                res += '\n'
+                
                 #add the skill to known skills
                 player_arg.known_skills.append(player_arg.unknown_skills[skill].copy())
                 #remove the skill from unknown skills
@@ -177,6 +154,156 @@ def level_up(player_arg):
         
         for remove in skills_to_remove:        
             player_arg.unknown_skills.remove(remove)
+            
+
+def get_gamesave(bool_load, dungeon_map, bounds, mapsize, need_class):
+    if bool_load in True:
+        matrix, dungeonmap, current_room, previous_room, x_coor, y_coor = load_game()
+        return matrix, dungeonmap, current_room, previous_room, x_coor, y_coor
+        
+        #display hint
+        hint()
+        
+        #print map to screen
+        for i in range(bounds):
+            for j in range(bounds):
+                print(matrix[i,j],end='  ')
+            print('\n')
+    
+    else:
+        new_Dungeon = DungeonGenerator(mapsize)
+        new_Dungeon.makeDungeon()
+        dungeon_map = new_Dungeon.map
+        
+        return dungeon_map
+        gen_new_map()
+        hint()
+        
+        
+def get_class(classes, need_class):
+    while(need_class):
+        res = 'What will the adventurer be this time?'
+        for character_class in classes:
+            res += str(character_class)
+        
+        command = input('>')
+        
+        if command in classes:
+            res = 'The adventurer wishes to be a' + command + '? So be it...'
+            
+            Skills().getSkills(player,command)
+            
+            need_class = False
+        else:
+            res = 'The adventurer may not venture this path. Choose another.'
+            need_class = True
+        return command
+
+def get_gamestate(dungeon_map, current_room, previous_room, x_coor, y_coor, mapsize, matrix, map_markers, bounds, room):            
+    map_marker = '0'
+    
+    if player.level >= len(player.level_array):
+        print('The adventurer has reached his true potential')
+        
+    else:
+        #check if character should level up
+       level_up(player)
+       
+       
+
+    room = dungeon_map[current_room]
+    ava_rooms = []
+    
+    new_Event = Event(room.room_type, player)
+    new_Event.fetchEvent()
+    
+    if player.is_dead == True:
+        print("The adventurer has died")
+    
+    if room.room_type == ('event_enemy_encounter' or 'event_enemy_encounter_boss') and player.ran_away == False:
+        #if we get here we know the player has won the encounter
+        room.room_type = 'dead_enemies'
+        
+    elif room.room_type == ('event_enemy_encounter' or 'event_enemy_encounter_boss') and player.ran_away == True:
+        print('The adventurer flees to the previous room', previous_room)
+        player.ran_away = False
+        if room.north == previous_room:
+            x_coor -= 1
+        elif room.south == previous_room:
+            x_coor += 1
+        elif room.east == previous_room:
+            y_coor += 1
+        else:
+            y_coor -= 1
+            
+        reset_map()
+        update_screen_map()
+        current_room = previous_room
+    
+    elif room.room_type == 'event_shop':
+        #shop leaves
+        room.room_type = 'empty_shop'
+        
+    elif (room.room_type == 'event_bonfire' and player.burn_bonfire == True):
+        room.room_type = 'burned_bonfire'
+        player.burn_bonfire = False
+    
+    elif room.room_type == 'event_bonfire' and player.burn_bonfire == False:
+        print("HERE")
+        map_marker = '^'
+        
+    elif room.room_type == 'event_stairs' and player.descend == False:
+        map_marker = 'x'
+
+    elif room.room_type == 'event_stairs' and player.descend == True:
+        player.descend = False
+
+        previous_room = 0
+        current_room = 0
+        
+        
+        new_Dungeon = DungeonGenerator(mapsize)
+        new_Dungeon.makeDungeon()
+        new_Dungeon.room_id = 0
+        dungeon_map = new_Dungeon.map
+        
+        y_coor = math.floor(bounds/2)
+        x_coor = math.floor(bounds/2)
+      
+        gen_new_map()
+        
+    
+    if room.north != -1:
+        ava_rooms.append("North")
+        if matrix[x_coor - 1, y_coor] not in map_markers:
+            matrix[x_coor - 1, y_coor] = '*'
+            
+    if room.south != -1:
+        ava_rooms.append("South")
+        if matrix[x_coor + 1, y_coor] not in map_markers:
+            matrix[x_coor +1, y_coor] = '*'
+            
+    if room.east != -1:
+        ava_rooms.append("East")
+        if matrix[x_coor, y_coor + 1] not in map_markers:
+            matrix[x_coor, y_coor + 1] = '*'
+            
+    if room.west != -1:
+        ava_rooms.append("West")
+        if matrix[x_coor, y_coor - 1] not in map_markers:
+            matrix[x_coor, y_coor - 1] = '*'
+            
+    #print map to screen
+    for i in range(bounds):
+        for j in range(bounds):
+            print(matrix[i,j],end='  ')
+        print('\n')
+    
+    msg = 'There is a room to the: '
+    for room in ava_rooms:
+        msg += room
+    
+    return msg, dungeon_map, current_room, previous_room, x_coor, y_coor, matrix, room, map_marker
 
 def main_loop(command):
     quit_flag = False
@@ -186,7 +313,7 @@ def main_loop(command):
         quit_flag = True
         
     elif command in ['north', 'North', 'move North', 'Move North', 'move north', 'Move north']:
-        ret= "The adventurer moves north."
+        ret = "The adventurer moves north."
        
         
     elif command in ['south', 'South', 'move South', 'Move South', 'move south', 'Move south']:
