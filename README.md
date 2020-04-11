@@ -64,6 +64,8 @@ You awake to unknown dungeon guided by an unknown voice. Face monsters and hazar
 - Add Exit (Added 7/3/2019)
 - Update Permadeath (i.e. just delete the files) (Added 11/12/2019)
 - Add security to save files to prevent cheating (Added 11/12/2019)
+- Add reactions to combat (1x per encounter), i.e. Counterspell, evasion, dodge, etc.
+
 
 ## Update (7/2/2019)
 - Added Armor and Weapon Durablitity
