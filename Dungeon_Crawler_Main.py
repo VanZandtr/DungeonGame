@@ -7,6 +7,8 @@ import numpy as np
 import math as math
 import pickle as pickle
 from os import path
+from Dungeon_Perm_Upgrades import Perm_Upgrade
+import os
 
 
 mapsize = 10
@@ -19,6 +21,7 @@ classes = ['Wizard','Priest']
 map_markers = ['0', 'x', '^']
 player = Player()
 skills = Skills()
+perm_upgrades = Perm_Upgrade()
 test = True
     
 #test items
@@ -69,6 +72,10 @@ def save_game():
         pickle.dump(y_coor, fp)
     fp.close()
 
+def load_perm_upgrades():
+    perm_upgrades.load_upgrades(player)
+    perm_upgrades.perm_key_applicator(['test'])
+
 def load_game():
     load_file = open('save_file.txt', 'rb')      
     #load player data
@@ -88,6 +95,7 @@ def load_game():
         x_coor = pickle.load(fp)
         y_coor = pickle.load(fp)
     fp.close()
+    
 
     return matrix, dungeon_map, current_room, previous_room, x_coor, y_coor
     
@@ -164,6 +172,7 @@ def level_up(player_arg):
 
 ''' GAME LOOP STARTS HERE'''
 #check if file exists
+load_new_dungeon = True
 if path.exists("save_file.txt") == True:
     load_opt = input('Would the adventurer like to use a saved game?>')
     if load_opt in ['y','Y','yes','Yes','YES']:
@@ -175,13 +184,19 @@ if path.exists("save_file.txt") == True:
             for j in range(bounds):
                 print(matrix[i,j],end='  ')
             print('\n')
+        load_new_dungeon = False
     
-    else:
-        new_Dungeon = DungeonGenerator(mapsize)
-        new_Dungeon.makeDungeon()
-        dungeon_map = new_Dungeon.map
-        gen_new_map()
-        hint()
+if(load_new_dungeon == True):
+    new_Dungeon = DungeonGenerator(mapsize)
+    new_Dungeon.makeDungeon()
+    dungeon_map = new_Dungeon.map
+    gen_new_map()
+    hint()
+
+if path.exists("perm_upgrades.txt") == True:
+    load_opt = input('Would the adventurer like to load their upgrades?>')
+    if load_opt in ['y','Y','yes','Yes','YES']:
+        load_perm_upgrades()
         
 while(need_class):
         print('What will the adventurer be this time?>')
@@ -221,6 +236,78 @@ while(True):
     
     if player.is_dead == True:
         print("The adventurer has died")
+        print()
+        print("The adventurer may buy upgrades for gold")
+        print()
+        
+        mt = perm_upgrades.mana_tree  
+        ht = perm_upgrades.health_tree
+        
+        while(True):                
+            print()
+            print(mt)
+            print()
+            print(ht)
+            print()
+            
+            upgrade_not_found = True
+            not_enough_gold = False
+            print("----------Upgrades----------")
+            print()
+            print('Gold:', player.gold)
+            print()
+            print('(q, Q, exit, Exit, Quit, quit) to leave.')
+            command = input('What would the adventurer like to purchase?>')
+            if command in ['q','Q','exit','Exit','Quit','quit']:
+                #save upgrades
+                perm_upgrades.save_upgrades(player)
+                
+                #delete files
+                if path.exists("save_file.txt") == True:
+                    os.remove("save_file.txt")
+                    
+                if path.exists("saved_dungeon_state.dat") == True:
+                    os.remove("saved_dungeon_state.dat")
+                    
+                if path.exists("my_matrix.dat") == True:
+                    os.remove("my_matrix.dat")
+                
+                print ("Goodbye")
+                print()
+                break
+            
+            else:
+                for mu in mt:
+                    if command == mu[1]:
+                        if mu[3] > player.gold:
+                            print('Not enough Gold')
+                            not_enough_gold = True
+                            break
+                        else:
+                            item_not_found = False
+                            player.gold -= mu[3]
+                            mt.remove(mu)
+                            player.perm_upgrades.append(mu.copy())
+                            print('A fine purchase.')
+                            break
+                    
+                for  hu in ht:
+                    if command == hu[1]:
+                        if hu[3] > player.gold:
+                            print('Not Enough Gold')
+                            not_enough_gold = True
+                            break
+                        else:
+                            item_not_found = False
+                            player.gold -= hu[3]
+                            ht.remove(hu)
+                            player.perm_upgrades.append(hu.copy())
+                            print('A fine purchase.')
+                            break
+                if item_not_found == True and not_enough_gold == False:
+                    print('WHAT!')
+                    continue
+
         break
     
     if map_room.room_type == ('event_enemy_encounter' or 'event_enemy_encounter_boss') and player.ran_away == False:
@@ -253,7 +340,6 @@ while(True):
         player.burn_bonfire = False
     
     elif map_room.room_type == 'event_bonfire' and player.burn_bonfire == False:
-        print("HERE")
         map_marker = '^'
         
     elif map_room.room_type == 'event_stairs' and player.descend == False:
@@ -329,7 +415,6 @@ while(True):
             reset_map()
             previous_room = current_room
             current_room = map_room.north
-            print("N", current_room)
             print()
         else:
             print("The adventurer may not move this way.")
@@ -346,7 +431,6 @@ while(True):
             reset_map()
             previous_room = current_room
             current_room = map_room.south
-            print("S", current_room)
             print()
         else:
             print("The adventurer may not move this way.")
@@ -363,7 +447,6 @@ while(True):
             reset_map()
             previous_room = current_room
             current_room = map_room.east
-            print("E", current_room)
             print()
         else:
             print("The adventurer may not move this way.")
@@ -380,12 +463,22 @@ while(True):
             reset_map()
             previous_room = current_room
             current_room = map_room.west
-            print("W", current_room)
             print()
         else:
             print("The adventurer may not move this way.")
             print()
             continue
+    elif command in ['U', 'u', 'Upgrades', 'upgrades']:
+        if len(player.perm_upgrades) == 0:
+            print("The Adventurer has not upgrades")
+        else:
+            print("------Upgrades--------")
+            print(player.perm_upgrades)
+        #TEST#
+        print("Granting 10000 gold and killing player")
+        player.gold = 10000
+        player.is_dead = True
+        continue
         
     elif command in ['I', 'i', 'Inventory', 'inventory']:
         print()

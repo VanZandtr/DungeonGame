@@ -46,4 +46,7 @@ class Player:
         self.rest_heal_amount = 10
         self.overheal_amount = 5
         self.rest_exp_amount = 500
+        
+        #perm upgrades
+        self.perm_upgrades = []
     

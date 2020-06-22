@@ -40,8 +40,6 @@ class Event:
                 print()
                 print("----------Shop----------")
                 
-                #Test shop
-                self.player.gold = 10000
                 
                 equipment_arr = random.sample(item_Class.veryeasy_shop_equipment, 5)
                 item_arr = random.sample(item_Class.veryeasy_shop_item, 5)
