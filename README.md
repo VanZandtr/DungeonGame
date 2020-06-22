@@ -100,7 +100,7 @@ You awake to unknown dungeon guided by an unknown voice. Face monsters and hazar
 
 ## Update (6/21/2020)
 - Added Permanent Upgrades between runs so players have an incentive to keep playing (in progress, needs testing and furthur dev but pipeline is there)
-- Removed attempt at PyGame, didn't fit the them of "Zork-esc"
+- Removed attempt at PyGame, didn't fit the theme of "Zork-esc"
 - Minor text output changes
 - Dying now deletes your dungeon, map, and player, but keeps your Purchased Upgrades
 - Upgrades are Optional and asked when to load when creating a new character
