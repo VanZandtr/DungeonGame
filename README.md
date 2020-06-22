@@ -68,7 +68,7 @@ You awake to unknown dungeon guided by an unknown voice. Face monsters and hazar
 - Update Permadeath (i.e. just delete the files) (Added 11/12/2019)
 - Add security to save files to prevent cheating (Added 11/12/2019)
 - Add reactions to combat (1x per encounter), i.e. Counterspell, evasion, dodge, etc.
-- Transition game to more "Rogue-lite" style, 3 floors, faster leveling, <s> and permanent upgrades between runs<s> (Completed 6/21/2020) (Added 6/21/2020)
+- Transition game to more "Rogue-lite" style, 3 floors, faster leveling, <s> and permanent upgrades between runs</s> (Completed 6/21/2020) (Added 6/21/2020)
 - Flesh out skill trees and add more (Added 6/21/2020)
 - Add custom username/generator (Added 6/21/2020)
 
