@@ -18,6 +18,7 @@ You awake to unknown dungeon guided by an unknown voice. Face monsters and hazar
 - Multiple Floors
 - Real Time Map
 - Game Saving
+- Permanent Progression
 
 ## How to Play
 1.) Download files  
@@ -51,6 +52,8 @@ You awake to unknown dungeon guided by an unknown voice. Face monsters and hazar
    * Holds save info for dungeon layout and gamestate
 - save_file.txt
    * Holds save info for player stats/equipment/skills
+- perm_upgrades.txt
+   * Holds Permanent Upgrades between playthroughs
 
 ## Future Work
 - <s>Multiple floors           (Added May 2019)</s> (Completed 7/3/2019)
@@ -65,8 +68,9 @@ You awake to unknown dungeon guided by an unknown voice. Face monsters and hazar
 - Update Permadeath (i.e. just delete the files) (Added 11/12/2019)
 - Add security to save files to prevent cheating (Added 11/12/2019)
 - Add reactions to combat (1x per encounter), i.e. Counterspell, evasion, dodge, etc.
-- Transition game to more "Rogue-lite" style, 3 floors, faster leveling, and permanent upgrades between runs (Added 6/21/2020)
-
+- Transition game to more "Rogue-lite" style, 3 floors, faster leveling, <s> and permanent upgrades between runs<s> (Completed 6/21/2020) (Added 6/21/2020)
+- Flesh out skill trees and add more (Added 6/21/2020)
+- Add custom username/generator (Added 6/21/2020)
 
 ## Update (7/2/2019)
 - Added Armor and Weapon Durablitity
@@ -93,3 +97,10 @@ You awake to unknown dungeon guided by an unknown voice. Face monsters and hazar
 
 ## Update (11/12/2019)
 - Straying away from traditional rogue-lites I have added a save feature that restores player states as well as dungeon state which mirrors the map layout
+
+## Update (6/21/2020)
+- Added Permanent Upgrades between runs so players have an incentive to keep playing (in progress, needs testing and furthur dev but pipeline is there)
+- Removed attempt at PyGame, didn't fit the them of "Zork-esc"
+- Minor text output changes
+- Dying now deletes your dungeon, map, and player, but keeps your Purchased Upgrades
+- Upgrades are Optional and asked when to load when creating a new character
