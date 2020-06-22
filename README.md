@@ -103,5 +103,5 @@ You awake to unknown dungeon guided by an unknown voice. Face monsters and hazar
 - Removed attempt at PyGame, didn't fit the theme of "Zork-esc"
 - Minor text output changes
 - Dying now deletes your dungeon, map, and player, but keeps your Purchased Upgrades
-- Upgrades are Optional and asked when to load when creating a new character
+- Upgrades are Optional
 - Updated hint menu to reflect new changes
