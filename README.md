@@ -104,3 +104,4 @@ You awake to unknown dungeon guided by an unknown voice. Face monsters and hazar
 - Minor text output changes
 - Dying now deletes your dungeon, map, and player, but keeps your Purchased Upgrades
 - Upgrades are Optional and asked when to load when creating a new character
+- Updated hint menu to reflect new changes
