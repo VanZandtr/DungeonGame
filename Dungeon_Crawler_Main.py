@@ -123,6 +123,7 @@ def hint():
     print('Inventory:','i, I, Inventory, inventory')
     print('Skills:','s, S, skills, Skills')
     print('Equip:','e, E, equip, Equip')
+    print('Upgrades:', 'u', 'U', 'upgrades', 'Upgrades')
     print('Unequip:','u, U, unequip, Unequip')
     print('Stuck?:','stuck', 'Stuck', "DELETE THIS AFTER MAP IS FIXED")
     print('Save Game:', 'SAV', 'sav', 'Sav')
